@@ -14,6 +14,7 @@ Requires:	webserver
 Requires:	php >= 4.1
 Requires:	php-mysql >= 5.0
 Requires:	php-gettext >= 5.0
+Requires:	php-pcre >= 5.0
 Requires:	php-xml >= 5.0
 Requires:	php-xmlrpc >= 5.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
