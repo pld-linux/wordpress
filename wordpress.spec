@@ -60,7 +60,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 if [ ! -f %{wordpressdir}/wp-config.php ]; then
-	cp -pf %{wordpressdir}/wp-config-sample.php %{wordpressdir}/wp-config.php
+	touch %{wordpressdir}/wp-config.php
+	chmod 0640 %{wordpressdir}/wp-config.php
+	chown root:http %{wordpressdir}/wp-config.php
+	cat %{wordpressdir}/wp-config-sample.php > %{wordpressdir}/wp-config.php
 	echo "To finish your configuration DO NOT FORGET to:"
 	echo
 	echo "0.) Create some MySQL database owned by some user"
@@ -69,15 +72,20 @@ if [ ! -f %{wordpressdir}/wp-config.php ]; then
 fi
 
 %files
-%defattr(640,root,http,750)
-%doc %attr(755,root,root) readme.html wp-setup.txt
+%defattr(644,root,root,755)
+%doc readme.html wp-setup.txt
 %dir %{wordpressdir}
-%attr(755,root,root) %{wordpressdir}/wp-secure.sh
-%attr(755,root,root) %{wordpressdir}/wp-setup.sh
-%attr(755,root,root) %{_bindir}/wp-secure
-%attr(755,root,root) %{_bindir}/wp-setup
+%dir %attr(750,root,http) %{wordpressdir}/wp-content
+%attr(640,root,http) %{wordpressdir}/wp-content/plugins/*.php
+%attr(640,root,http) %{wordpressdir}/wp-content/themes/classic/*
+%attr(640,root,http) %{wordpressdir}/wp-content/themes/default/*.php
+%attr(640,root,http) %{wordpressdir}/wp-content/themes/default/*.css
+%attr(640,root,http) %{wordpressdir}/wp-content/themes/default/images/*
 %{wordpressdir}/wp-admin
-%{wordpressdir}/wp-content
 %{wordpressdir}/wp-images
 %{wordpressdir}/wp-includes
 %{wordpressdir}/*.php
+%{wordpressdir}/wp-secure.sh
+%{wordpressdir}/wp-setup.sh
+%{_bindir}/wp-secure
+%{_bindir}/wp-setup
