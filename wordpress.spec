@@ -62,8 +62,8 @@ if [ ! -f %{wordpressdir}/wp-config.php ]; then
 fi
 
 %files
-%defattr(644,root,root,755)
-%doc readme.html
+%defattr(640,root,http,750)
+%doc %attr(755,root,root) readme.html
 %dir %{wordpressdir}
 %{wordpressdir}/wp-admin
 %{wordpressdir}/wp-content
