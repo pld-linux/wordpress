@@ -1,4 +1,3 @@
-
 Summary:	Personal publishing system
 Summary(pl):	Osobisty system publikacji
 Name:		wordpress
@@ -9,14 +8,14 @@ Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
 # Source0-md5:	df6dc18a7a0d93fa6bb187eb48b41612
 URL:		http://wordpress.org/
-BuildArch:	noarch
-Requires:	webserver
 Requires:	php >= 4.1
-Requires:	php-mysql >= 5.0
 Requires:	php-gettext >= 5.0
+Requires:	php-mysql >= 5.0
 Requires:	php-pcre >= 5.0
 Requires:	php-xml >= 5.0
 Requires:	php-xmlrpc >= 5.0
+Requires:	webserver
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define	wordpressdir	/home/services/httpd/html/wordpress
@@ -32,7 +31,7 @@ go back to 2001.
 
 %description -l pl
 WordPress jest technologicznie dopracowan±, semantyczn±, osobist±
-platform± do publikacji k³ad±c± nacisk na standardy sieci Web oraz
+platform± do publikacji k³ad±c± nacisk na standardy WWW oraz
 u¿yteczno¶æ. WordPress zosta³ stworzony w wyniku potrzeby
 eleganckiego, dobrze zaprojektowanego, osobistego systemu publikacji
 (nazywanego równie¿ blogiem czy weblogiem). Jest to system oparty
@@ -50,6 +49,9 @@ install -d $RPM_BUILD_ROOT%{wordpressdir}
 rm -f license.txt
 cp -R * $RPM_BUILD_ROOT%{wordpressdir}
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %post
 if [ ! -f %{wordpressdir}/wp-config.php ]; then
 	cp -pf %{wordpressdir}/wp-config-sample.php %{wordpressdir}/wp-config.php
@@ -58,9 +60,6 @@ if [ ! -f %{wordpressdir}/wp-config.php ]; then
 	echo "1.) Edit the file: %{wordpressdir}/wp-config.php"
 	echo "2.) Run a browser and visit: http://`hostname`/wordpress/wp-admin/install.php"
 fi
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
