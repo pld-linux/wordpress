@@ -105,6 +105,10 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/httpd/%{name}.conf
 %dir %{wordpressdir}
 %dir %attr(750,root,http) %{wordpressdir}/wp-content
+%dir %attr(750,root,http) %{wordpressdir}/wp-content/plugins
+%dir %attr(750,root,http) %{wordpressdir}/wp-content/themes
+%dir %attr(750,root,http) %{wordpressdir}/wp-content/themes/classic
+%dir %attr(750,root,http) %{wordpressdir}/wp-content/themes/default
 %attr(640,root,http) %{wordpressdir}/wp-content/plugins/*.php
 %attr(640,root,http) %{wordpressdir}/wp-content/themes/classic/*
 %attr(640,root,http) %{wordpressdir}/wp-content/themes/default/*.php
