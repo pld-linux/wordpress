@@ -49,14 +49,16 @@ cp %{SOURCE1} %{SOURCE2} %{SOURCE3} .
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{wordpressdir} $RPM_BUILD_ROOT%{_bindir}
+install -d $RPM_BUILD_ROOT%{wordpressdir} $RPM_BUILD_ROOT%{_bindir} $RPM_BUILD_ROOT/etc/httpd
 
 rm -f license.txt
+install %{SOURCE4} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+
 cp -R * $RPM_BUILD_ROOT%{wordpressdir}
+rm -f $RPM_BUILD_ROOT%{wordpressdir}/readme.html
+rm -f $RPM_BUILD_ROOT%{wordpressdir}/wp-setup.txt
 ln -sf %{wordpressdir}/wp-setup.sh $RPM_BUILD_ROOT%{_bindir}/wp-setup
 ln -sf %{wordpressdir}/wp-secure.sh $RPM_BUILD_ROOT%{_bindir}/wp-secure
-
-install %{SOURCE4} $RPM_BUILD_ROOT//etc/httpd/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
