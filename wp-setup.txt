@@ -1,0 +1,30 @@
+
+    Customizing WordPress plugins and themes
+    in a default installation from PLD package.
+
+			    Pawel Wilk <siefca@gnu.org>
+
+Some  WordPress plugins  need customization  by editing  PHP
+files  via web  interface.  Maybe there  are  also some  CSS
+styles and/or theme  files you would like to  edit that way.
+However,  in default  PLD  installation  (from RPM  package)
+all  these files  (plugins and  themes and  their respective
+directories) are writable only by their owner, which is root
+user. Additionaly the group which owns the files is a group,
+which web server  uses by default (http), but  the files and
+directories are only readable (searchable) by this group.
+
+If you would  like to customize your WordPress  site via the
+Web  you should  first let  the  owning group  to write  the
+files. You can  set it up by  invoking: /usr/bin/wp-setup or
+./wp-setup.sh in your WordPress directory.
+
+When you finish you may want to revoke the ability to change
+by  calling:  /usr/bin/wp-secure  or ./wp-secure.sh  in  the
+WordPress default installation directory.
+
+This  simple routine  is  highly recommended  when you  have
+multiple dynamic  sites running  under the  same parmissions
+and avoids  bad users  to overwrite  your content  files via
+nasty server-side scripts.
+
