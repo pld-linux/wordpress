@@ -2,7 +2,7 @@ Summary:	Personal publishing system
 Summary(pl):	Osobisty system publikacji
 Name:		wordpress
 Version:	1.5
-Release:	2
+Release:	3
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
@@ -10,6 +10,7 @@ Source0:	http://wordpress.org/latest.tar.gz
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
+Source4:	%{name}.conf
 URL:		http://wordpress.org/
 Requires:	php >= 4.1
 Requires:	php-gettext >= 5.0
@@ -17,11 +18,11 @@ Requires:	php-mysql >= 5.0
 Requires:	php-pcre >= 5.0
 Requires:	php-xml >= 5.0
 Requires:	php-xmlrpc >= 5.0
-Requires:	webserver
+Requires:	httpd
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define	wordpressdir	/home/services/httpd/html/wordpress
+%define	wordpressdir	%{_datadir}/%{name}
 
 %description
 WordPress is a state-of-the-art semantic personal publishing platform
@@ -52,13 +53,23 @@ install -d $RPM_BUILD_ROOT%{wordpressdir} $RPM_BUILD_ROOT%{_bindir}
 
 rm -f license.txt
 cp -R * $RPM_BUILD_ROOT%{wordpressdir}
-ln -s %{wordpressdir}/wp-setup.sh $RPM_BUILD_ROOT%{_bindir}/wp-setup
-ln -s %{wordpressdir}/wp-secure.sh $RPM_BUILD_ROOT%{_bindir}/wp-secure
+ln -sf %{wordpressdir}/wp-setup.sh $RPM_BUILD_ROOT%{_bindir}/wp-setup
+ln -sf %{wordpressdir}/wp-secure.sh $RPM_BUILD_ROOT%{_bindir}/wp-secure
+
+install %{SOURCE4} $RPM_BUILD_ROOT//etc/httpd/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
+if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
+	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
+elif [ -d /etc/httpd/httpd.conf ]; then
+	ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
+fi
+if [ -f /var/lock/subsys/httpd ]; then
+	/usr/sbin/apachectl restart 1>&2
+fi
 if [ ! -f %{wordpressdir}/wp-config.php ]; then
 	touch %{wordpressdir}/wp-config.php
 	chmod 0640 %{wordpressdir}/wp-config.php
@@ -71,9 +82,25 @@ if [ ! -f %{wordpressdir}/wp-config.php ]; then
 	echo "2.) Run a browser and visit: http://`hostname`/wordpress/wp-admin/install.php"
 fi
 
+%preun
+if [ "$1" = "0" ]; then
+	umask 027
+	if [ -d /etc/httpd/httpd.conf ]; then
+		rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+	else
+		grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
+			/etc/httpd/httpd.conf.tmp
+		mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+		if [ -f /var/lock/subsys/httpd ]; then
+			/usr/sbin/apachectl restart 1>&2
+		fi
+	fi
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc readme.html wp-setup.txt
+%config(noreplace) %verify(not md5 mtime size) /etc/httpd/%{name}.conf
 %dir %{wordpressdir}
 %dir %attr(750,root,http) %{wordpressdir}/wp-content
 %attr(640,root,http) %{wordpressdir}/wp-content/plugins/*.php
