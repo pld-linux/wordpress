@@ -2,11 +2,14 @@ Summary:	Personal publishing system
 Summary(pl):	Osobisty system publikacji
 Name:		wordpress
 Version:	1.5
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
 # Source0-md5:	df6dc18a7a0d93fa6bb187eb48b41612
+Source1:	wp-secure.sh
+Source2:	wp-setup.sh
+Source3:	wp-setup.txt
 URL:		http://wordpress.org/
 Requires:	php >= 4.1
 Requires:	php-gettext >= 5.0
@@ -41,13 +44,16 @@ siêgaj± 2001 roku.
 
 %prep
 %setup -q -n %{name}
+cp %{SOURCE1} %{SOURCE2} %{SOURCE3} .
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{wordpressdir}
+install -d $RPM_BUILD_ROOT%{wordpressdir} $RPM_BUILD_ROOT%{_bindir}
 
 rm -f license.txt
 cp -R * $RPM_BUILD_ROOT%{wordpressdir}
+ln -s %{wordpressdir}/wp-setup.sh $RPM_BUILD_ROOT%{_bindir}/wp-setup
+ln -s %{wordpressdir}/wp-secure.sh $RPM_BUILD_ROOT%{_bindir}/wp-secure
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -57,14 +63,19 @@ if [ ! -f %{wordpressdir}/wp-config.php ]; then
 	cp -pf %{wordpressdir}/wp-config-sample.php %{wordpressdir}/wp-config.php
 	echo "To finish your configuration DO NOT FORGET to:"
 	echo
+	echo "0.) Create some MySQL database owned by some user"
 	echo "1.) Edit the file: %{wordpressdir}/wp-config.php"
 	echo "2.) Run a browser and visit: http://`hostname`/wordpress/wp-admin/install.php"
 fi
 
 %files
 %defattr(640,root,http,750)
-%doc %attr(755,root,root) readme.html
+%doc %attr(755,root,root) readme.html wp-setup.txt
 %dir %{wordpressdir}
+%attr(755,root,root) %{wordpressdir}/wp-secure.sh
+%attr(755,root,root) %{wordpressdir}/wp-setup.sh
+%attr(755,root,root) %{_bindir}/wp-secure
+%attr(755,root,root) %{_bindir}/wp-setup
 %{wordpressdir}/wp-admin
 %{wordpressdir}/wp-content
 %{wordpressdir}/wp-images
