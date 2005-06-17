@@ -122,5 +122,5 @@ fi
 %{wordpressdir}/*.php
 %{wordpressdir}/wp-secure.sh
 %{wordpressdir}/wp-setup.sh
-%{_bindir}/wp-secure
-%{_bindir}/wp-setup
+%attr(755,root,root) %{_bindir}/wp-secure
+%attr(755,root,root) %{_bindir}/wp-setup
