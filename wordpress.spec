@@ -1,11 +1,12 @@
 # TODO
 # - security http://security.gentoo.org/glsa/glsa-200506-04.xml
 # - security http://security.gentoo.org/glsa/glsa-200507-02.xml
+# - put config files to %{_sysconfdir}!
 Summary:	Personal publishing system
 Summary(pl):	Osobisty system publikacji
 Name:		wordpress
 Version:	1.5
-Release:	3
+Release:	3.1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
@@ -15,17 +16,20 @@ Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	%{name}.conf
 URL:		http://wordpress.org/
-Requires:	php >= 4.1
-Requires:	php-gettext >= 5.0
-Requires:	php-mysql >= 5.0
-Requires:	php-pcre >= 5.0
-Requires:	php-xml >= 5.0
-Requires:	php-xmlrpc >= 5.0
-Requires:	httpd
+Requires:	php >= 3:4.1
+Requires:	php-gettext >= 4:5.0
+Requires:	php-mysql >= 4:5.0
+Requires:	php-pcre >= 4:5.0
+Requires:	php-xml >= 4:5.0
+Requires:	php-xmlrpc >= 4:5.0
+Requires:	webapps
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define	wordpressdir	%{_datadir}/%{name}
+%define		_appdir		%{_datadir}/%{name}
+%define		_webapps	/etc/webapps
+%define		_webapp		%{name}
+%define		_sysconfdir	%{_webapps}/%{_webapp}
 
 %description
 WordPress is a state-of-the-art semantic personal publishing platform
@@ -41,87 +45,100 @@ WordPress jest technologicznie dopracowan±, semantyczn±, osobist±
 platform± do publikacji k³ad±c± nacisk na standardy WWW oraz
 u¿yteczno¶æ. WordPress zosta³ stworzony w wyniku potrzeby
 eleganckiego, dobrze zaprojektowanego, osobistego systemu publikacji
-(nazywanego równie¿ blogiem czy weblogiem). Jest to system oparty
-o PHP i MySQL oraz na licencji GPL. Jest oficjalnym nastêpc± b2/cafelog.
+(nazywanego równie¿ blogiem czy weblogiem). Jest to system oparty o
+PHP i MySQL oraz na licencji GPL. Jest oficjalnym nastêpc± b2/cafelog.
 WordPress jest nowym oprogramowaniem, ale jego korzenie i rozwój
 siêgaj± 2001 roku.
 
 %prep
 %setup -q -n %{name}
 cp %{SOURCE1} %{SOURCE2} %{SOURCE3} .
+rm -f license.txt
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{wordpressdir} $RPM_BUILD_ROOT%{_bindir} $RPM_BUILD_ROOT/etc/httpd
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir}}
 
-rm -f license.txt
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+cp -R * $RPM_BUILD_ROOT%{_appdir}
+rm -f $RPM_BUILD_ROOT%{_appdir}/readme.html
+rm -f $RPM_BUILD_ROOT%{_appdir}/wp-setup.txt
+ln -sf %{_appdir}/wp-setup.sh $RPM_BUILD_ROOT%{_bindir}/wp-setup
+ln -sf %{_appdir}/wp-secure.sh $RPM_BUILD_ROOT%{_bindir}/wp-secure
 
-cp -R * $RPM_BUILD_ROOT%{wordpressdir}
-rm -f $RPM_BUILD_ROOT%{wordpressdir}/readme.html
-rm -f $RPM_BUILD_ROOT%{wordpressdir}/wp-setup.txt
-ln -sf %{wordpressdir}/wp-setup.sh $RPM_BUILD_ROOT%{_bindir}/wp-setup
-ln -sf %{wordpressdir}/wp-secure.sh $RPM_BUILD_ROOT%{_bindir}/wp-secure
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
-	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
-elif [ -d /etc/httpd/httpd.conf ]; then
-	ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
-fi
-if [ -f /var/lock/subsys/httpd ]; then
-	/usr/sbin/apachectl restart 1>&2
-fi
-if [ ! -f %{wordpressdir}/wp-config.php ]; then
-	touch %{wordpressdir}/wp-config.php
-	chmod 0640 %{wordpressdir}/wp-config.php
-	chown root:http %{wordpressdir}/wp-config.php
-	cat %{wordpressdir}/wp-config-sample.php > %{wordpressdir}/wp-config.php
-	echo "To finish your configuration DO NOT FORGET to:"
-	echo
-	echo "0.) Create some MySQL database owned by some user"
-	echo "1.) Edit the file: %{wordpressdir}/wp-config.php"
-	echo "2.) Run a browser and visit: http://`hostname`/wordpress/wp-admin/install.php"
+if [ ! -f %{_appdir}/wp-config.php ]; then
+	install -uroot -ghttp -m640 %{_appdir}/wp-config-sample.php > %{_appdir}/wp-config.php
+
+	%banner -e %{name} <<-EOF
+	To finish your configuration DO NOT FORGET to:
+
+	1) Create some MySQL database owned by some user
+	2) Edit the file: %{_appdir}/wp-config.php
+	3) Run a browser and visit: http://`hostname`/wordpress/wp-admin/install.php
+EOF
 fi
 
-%preun
-if [ "$1" = "0" ]; then
-	umask 027
-	if [ -d /etc/httpd/httpd.conf ]; then
-		rm -f /etc/httpd/httpd.conf/99_%{name}.conf
-	else
-		grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
-			/etc/httpd/httpd.conf.tmp
-		mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
-		if [ -f /var/lock/subsys/httpd ]; then
-			/usr/sbin/apachectl restart 1>&2
-		fi
+%triggerin -- apache1
+%webapp_register apache %{_webapp}
+
+%triggerun -- apache1
+%webapp_unregister apache %{_webapp}
+
+%triggerin -- apache >= 2.0.0
+%webapp_register httpd %{_webapp}
+
+%triggerun -- apache >= 2.0.0
+%webapp_unregister httpd %{_webapp}
+
+%triggerpostun -- %{name} < 1.5-3.1
+# migrate from httpd (apache2) config dir
+if [ -f /etc/httpd/%{name}.conf.rpmsave ]; then
+	cp -f %{_webapps}/%{_webapp}/httpd.conf{,.rpmnew}
+	mv -f /etc/httpd/%{name}.conf.rpmsave %{_webapps}/%{_webapp}/httpd.conf
+	httpd_reload=1
+fi
+
+if [ -L /etc/httpd/httpd.conf/99_%{name}.conf ]; then
+	rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+	/usr/sbin/webapp register httpd %{_webapp}
+	httpd_reload=1
+fi
+
+if [ "$httpd_reload" ]; then
+	if [ -f /var/lock/subsys/httpd ]; then
+		/etc/rc.d/init.d/httpd reload 1>&2
 	fi
 fi
 
 %files
 %defattr(644,root,root,755)
 %doc readme.html wp-setup.txt
-%config(noreplace) %verify(not md5 mtime size) /etc/httpd/%{name}.conf
-%dir %{wordpressdir}
-%dir %attr(750,root,http) %{wordpressdir}/wp-content
-%dir %attr(750,root,http) %{wordpressdir}/wp-content/plugins
-%dir %attr(750,root,http) %{wordpressdir}/wp-content/themes
-%dir %attr(750,root,http) %{wordpressdir}/wp-content/themes/classic
-%dir %attr(750,root,http) %{wordpressdir}/wp-content/themes/default
-%attr(640,root,http) %{wordpressdir}/wp-content/plugins/*.php
-%attr(640,root,http) %{wordpressdir}/wp-content/themes/classic/*
-%attr(640,root,http) %{wordpressdir}/wp-content/themes/default/*.php
-%attr(640,root,http) %{wordpressdir}/wp-content/themes/default/*.css
-%attr(640,root,http) %{wordpressdir}/wp-content/themes/default/images/*
-%{wordpressdir}/wp-admin
-%{wordpressdir}/wp-images
-%{wordpressdir}/wp-includes
-%{wordpressdir}/*.php
-%{wordpressdir}/wp-secure.sh
-%{wordpressdir}/wp-setup.sh
+%dir %attr(750,root,http) %{_sysconfdir}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
+
+%dir %{_appdir}
+%dir %attr(750,root,http) %{_appdir}/wp-content
+%dir %attr(750,root,http) %{_appdir}/wp-content/plugins
+%dir %attr(750,root,http) %{_appdir}/wp-content/themes
+%dir %attr(750,root,http) %{_appdir}/wp-content/themes/classic
+%dir %attr(750,root,http) %{_appdir}/wp-content/themes/default
+%attr(640,root,http) %{_appdir}/wp-content/plugins/*.php
+%attr(640,root,http) %{_appdir}/wp-content/themes/classic/*
+%attr(640,root,http) %{_appdir}/wp-content/themes/default/*.php
+%attr(640,root,http) %{_appdir}/wp-content/themes/default/*.css
+%attr(640,root,http) %{_appdir}/wp-content/themes/default/images/*
+%{_appdir}/wp-admin
+%{_appdir}/wp-images
+%{_appdir}/wp-includes
+%{_appdir}/*.php
+%{_appdir}/wp-secure.sh
+%{_appdir}/wp-setup.sh
 %attr(755,root,root) %{_bindir}/wp-secure
 %attr(755,root,root) %{_bindir}/wp-setup
