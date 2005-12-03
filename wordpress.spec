@@ -6,7 +6,7 @@ Summary:	Personal publishing system
 Summary(pl):	Osobisty system publikacji
 Name:		wordpress
 Version:	1.5
-Release:	3.1
+Release:	4
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
@@ -97,7 +97,6 @@ fi
 %webapp_unregister httpd %{_webapp}
 
 %triggerpostun -- wordpress < 1.5-3.1
-# migrate from httpd (apache2) config dir
 if [ -f /etc/httpd/wordpress.conf.rpmsave ]; then
 	cp -f %{_sysconfdir}/httpd.conf{,.rpmnew}
 	mv -f /etc/httpd/wordpress.conf.rpmsave %{_sysconfdir}/httpd.conf
