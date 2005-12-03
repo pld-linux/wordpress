@@ -96,24 +96,18 @@ fi
 %triggerun -- apache >= 2.0.0
 %webapp_unregister httpd %{_webapp}
 
-%triggerpostun -- %{name} < 1.5-3.1
+%triggerpostun -- wordpress < 1.5-3.1
 # migrate from httpd (apache2) config dir
-if [ -f /etc/httpd/%{name}.conf.rpmsave ]; then
-	cp -f %{_webapps}/%{_webapp}/httpd.conf{,.rpmnew}
-	mv -f /etc/httpd/%{name}.conf.rpmsave %{_webapps}/%{_webapp}/httpd.conf
-	httpd_reload=1
+if [ -f /etc/httpd/wordpress.conf.rpmsave ]; then
+	cp -f %{_sysconfdir}/httpd.conf{,.rpmnew}
+	mv -f /etc/httpd/wordpress.conf.rpmsave %{_sysconfdir}/httpd.conf
 fi
 
-if [ -L /etc/httpd/httpd.conf/99_%{name}.conf ]; then
-	rm -f /etc/httpd/httpd.conf/99_%{name}.conf
-	/usr/sbin/webapp register httpd %{_webapp}
-	httpd_reload=1
-fi
+rm -f /etc/httpd/httpd.conf/99_wordpress.conf
+/usr/sbin/webapp register httpd %{_webapp}
 
-if [ "$httpd_reload" ]; then
-	if [ -f /var/lock/subsys/httpd ]; then
-		/etc/rc.d/init.d/httpd reload 1>&2
-	fi
+if [ -f /var/lock/subsys/httpd ]; then
+	/etc/rc.d/init.d/httpd reload 1>&2
 fi
 
 %files
