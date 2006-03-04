@@ -1,16 +1,14 @@
 # TODO
-# - security http://security.gentoo.org/glsa/glsa-200506-04.xml
-# - security http://security.gentoo.org/glsa/glsa-200507-02.xml
 # - put config files to %{_sysconfdir}!
 Summary:	Personal publishing system
 Summary(pl):	Osobisty system publikacji
 Name:		wordpress
-Version:	1.5
-Release:	4
+Version:	2.0.1
+Release:	1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
-# Source0-md5:	df6dc18a7a0d93fa6bb187eb48b41612
+# Source0-md5:	265ffae2b5744f3f5afa9d57095c1f36
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
