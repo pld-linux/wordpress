@@ -94,19 +94,6 @@ fi
 %triggerun -- apache < 2.2.0, apache-base
 %webapp_unregister httpd %{_webapp}
 
-%triggerpostun -- wordpress < 1.5-3.1
-if [ -f /etc/httpd/wordpress.conf.rpmsave ]; then
-	cp -f %{_sysconfdir}/httpd.conf{,.rpmnew}
-	mv -f /etc/httpd/wordpress.conf.rpmsave %{_sysconfdir}/httpd.conf
-fi
-
-rm -f /etc/httpd/httpd.conf/99_wordpress.conf
-/usr/sbin/webapp register httpd %{_webapp}
-
-if [ -f /var/lock/subsys/httpd ]; then
-	/etc/rc.d/init.d/httpd reload 1>&2
-fi
-
 %files
 %defattr(644,root,root,755)
 %doc readme.html wp-setup.txt
