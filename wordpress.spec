@@ -3,12 +3,12 @@
 Summary:	Personal publishing system
 Summary(pl):	Osobisty system publikacji
 Name:		wordpress
-Version:	2.0.1
+Version:	2.0.4
 Release:	1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
-# Source0-md5:	5eb6685eba97c67ccaebc74de30cef4e
+# Source0-md5:	0de8e4b2051ce9313a23d7726210d5e3
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
@@ -108,12 +108,12 @@ fi
 %dir %attr(750,root,http) %{_appdir}/wp-content/themes/classic
 %dir %attr(750,root,http) %{_appdir}/wp-content/themes/default
 %attr(640,root,http) %{_appdir}/wp-content/plugins/*.php
+%attr(640,root,http) %{_appdir}/wp-content/plugins/akismet
 %attr(640,root,http) %{_appdir}/wp-content/themes/classic/*
 %attr(640,root,http) %{_appdir}/wp-content/themes/default/*.php
 %attr(640,root,http) %{_appdir}/wp-content/themes/default/*.css
 %attr(640,root,http) %{_appdir}/wp-content/themes/default/images/*
 %{_appdir}/wp-admin
-%{_appdir}/wp-images
 %{_appdir}/wp-includes
 %{_appdir}/*.php
 %{_appdir}/wp-secure.sh
