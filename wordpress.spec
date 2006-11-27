@@ -14,13 +14,13 @@ Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	%{name}.conf
 URL:		http://wordpress.org/
-Requires:	php >= 3:4.1
-Requires:	php-gettext >= 4:5.0
-Requires:	php-mysql >= 4:5.0
-Requires:	php-pcre >= 4:5.0
-Requires:	php-xml >= 4:5.0
-Requires:	php-xmlrpc >= 4:5.0
+Requires:	php(gettext)
+Requires:	php(mysql)
+Requires:	php(pcre)
+Requires:	php(xml)
+Requires:	php(xmlrpc)
 Requires:	webapps
+Requires:	webserver(php) >= 5.0
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
