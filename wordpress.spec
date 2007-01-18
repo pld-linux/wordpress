@@ -3,12 +3,12 @@
 Summary:	Personal publishing system
 Summary(pl):	Osobisty system publikacji
 Name:		wordpress
-Version:	2.0.6
+Version:	2.0.7
 Release:	1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
-# Source0-md5:	ebe00cee610065bc576bb38db18c792c
+# Source0-md5:	8b7dd3d4e606092b039dd65c23a9c303
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
