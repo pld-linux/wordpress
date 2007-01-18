@@ -8,7 +8,7 @@ Release:	1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
-# Source0-md5:	8b7dd3d4e606092b039dd65c23a9c303
+# Source0-md5:	e377fa9389d1a06a700ac349582f498c
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
