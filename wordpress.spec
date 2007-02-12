@@ -1,7 +1,7 @@
 # TODO
 # - put config files to %{_sysconfdir}!
 Summary:	Personal publishing system
-Summary(pl.UTF-8):   Osobisty system publikacji
+Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	2.0.7
 Release:	1
