@@ -1,7 +1,7 @@
 # TODO
 # - put config files to %{_sysconfdir}!
 Summary:	Personal publishing system
-Summary(pl):	Osobisty system publikacji
+Summary(pl.UTF-8):   Osobisty system publikacji
 Name:		wordpress
 Version:	2.0.7
 Release:	1
@@ -38,15 +38,15 @@ and licensed under the GPL. It is the official successor of
 b2/cafelog. WordPress is fresh software, but its roots and development
 go back to 2001.
 
-%description -l pl
-WordPress jest technologicznie dopracowan±, semantyczn±, osobist±
-platform± do publikacji k³ad±c± nacisk na standardy WWW oraz
-u¿yteczno¶æ. WordPress zosta³ stworzony w wyniku potrzeby
+%description -l pl.UTF-8
+WordPress jest technologicznie dopracowanÄ…, semantycznÄ…, osobistÄ…
+platformÄ… do publikacji kÅ‚adÄ…cÄ… nacisk na standardy WWW oraz
+uÅ¼ytecznoÅ›Ä‡. WordPress zostaÅ‚ stworzony w wyniku potrzeby
 eleganckiego, dobrze zaprojektowanego, osobistego systemu publikacji
-(nazywanego równie¿ blogiem czy weblogiem). Jest to system oparty o
-PHP i MySQL oraz na licencji GPL. Jest oficjalnym nastêpc± b2/cafelog.
-WordPress jest nowym oprogramowaniem, ale jego korzenie i rozwój
-siêgaj± 2001 roku.
+(nazywanego rÃ³wnieÅ¼ blogiem czy weblogiem). Jest to system oparty o
+PHP i MySQL oraz na licencji GPL. Jest oficjalnym nastÄ™pcÄ… b2/cafelog.
+WordPress jest nowym oprogramowaniem, ale jego korzenie i rozwÃ³j
+siÄ™gajÄ… 2001 roku.
 
 %prep
 %setup -q -n %{name}
