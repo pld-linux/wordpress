@@ -3,7 +3,7 @@
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	2.0.7
+Version:	2.1
 Release:	1
 License:	GPL
 Group:		Applications/Publishing
@@ -107,6 +107,7 @@ fi
 %dir %attr(750,root,http) %{_appdir}/wp-content/themes
 %dir %attr(750,root,http) %{_appdir}/wp-content/themes/classic
 %dir %attr(750,root,http) %{_appdir}/wp-content/themes/default
+%dir %attr(750,root,http) %{_appdir}/wp-content/themes/default/images
 %attr(640,root,http) %{_appdir}/wp-content/plugins/*.php
 %attr(640,root,http) %{_appdir}/wp-content/plugins/akismet
 %attr(640,root,http) %{_appdir}/wp-content/themes/classic/*
@@ -120,3 +121,4 @@ fi
 %{_appdir}/wp-setup.sh
 %attr(755,root,root) %{_bindir}/wp-secure
 %attr(755,root,root) %{_bindir}/wp-setup
+      
