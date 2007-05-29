@@ -1,5 +1,6 @@
 # TODO
 # - put config files to %{_sysconfdir}!
+# - switch to versioned url: ftp://ftp.openpkg.org/sources/CPY/VERSIONED/00README
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
