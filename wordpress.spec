@@ -4,16 +4,17 @@
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	2.2.3
+Version:	2.3
 Release:	1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
-# Source0-md5:	98c1e611f8533d4fe4e8f995b8d83110
+# Source0-md5:	36ffea2a049a071342efda985feedf31
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	%{name}.conf
+Source5:        %{name}-lighttpd.conf
 URL:		http://wordpress.org/
 Requires:	php(gettext)
 Requires:	php(mysql)
@@ -66,6 +67,7 @@ ln -sf %{_appdir}/wp-secure.sh $RPM_BUILD_ROOT%{_bindir}/wp-secure
 
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,6 +88,9 @@ fi
 %triggerin -- apache1 < 1.3.37-3, apache1-base
 %webapp_register apache %{_webapp}
 
+%triggerin -- lighttpd
+%webapp_register lighttpd %{_webapp}
+
 %triggerun -- apache1 < 1.3.37-3, apache1-base
 %webapp_unregister apache %{_webapp}
 
@@ -95,12 +100,16 @@ fi
 %triggerun -- apache < 2.2.0, apache-base
 %webapp_unregister httpd %{_webapp}
 
+%triggerun -- lighttpd
+%webapp_unregister lighttpd %{_webapp}
+
 %files
 %defattr(644,root,root,755)
 %doc readme.html wp-setup.txt
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/lighttpd.conf
 
 %dir %{_appdir}
 %dir %attr(750,root,http) %{_appdir}/wp-content
@@ -115,6 +124,8 @@ fi
 %attr(640,root,http) %{_appdir}/wp-content/themes/default/*.php
 %attr(640,root,http) %{_appdir}/wp-content/themes/default/*.css
 %attr(640,root,http) %{_appdir}/wp-content/themes/default/images/*
+%{_appdir}/wp-content/index.php
+%{_appdir}/wp-content/themes/default/screenshot.png
 %{_appdir}/wp-admin
 %{_appdir}/wp-includes
 %{_appdir}/*.php
