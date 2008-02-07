@@ -14,7 +14,7 @@ Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	%{name}.conf
-Source5:        %{name}-lighttpd.conf
+Source5:	%{name}-lighttpd.conf
 URL:		http://wordpress.org/
 Requires:	php(gettext)
 Requires:	php(mysql)
@@ -74,7 +74,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 if [ ! -f %{_appdir}/wp-config.php ]; then
-	install -uroot -ghttp -m640 %{_appdir}/wp-config-sample.php > %{_appdir}/wp-config.php
+	install -oroot -ghttp -m640 %{_appdir}/wp-config-sample.php %{_appdir}/wp-config.php
 
 	%banner -e %{name} <<-EOF
 	To finish your configuration DO NOT FORGET to:
@@ -133,4 +133,3 @@ fi
 %{_appdir}/wp-setup.sh
 %attr(755,root,root) %{_bindir}/wp-secure
 %attr(755,root,root) %{_bindir}/wp-setup
-      
