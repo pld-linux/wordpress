@@ -4,17 +4,21 @@
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	2.3.1
+Version:	2.3.3
 Release:	1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
-# Source0-md5:	bd53264cbe80e470c5a9bc2cf7aa85e4
+# Source0-md5:	19518de1117aa68f0c3de84b6858efc3
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	%{name}.conf
 Source5:	%{name}-lighttpd.conf
+Source6:	http://wordpress-polska.org/system/files/pl_PL_0.po
+# Source6-md5:	0b1d193435065c98e12ac188232f190f
+Source7:	http://wordpress-polska.org/system/files/pl_PL_0.mo
+# Source7-md5:	4ec7fff754ce3cbdccfde7fc58d98af6
 URL:		http://wordpress.org/
 Requires:	php(gettext)
 Requires:	php(mysql)
@@ -57,7 +61,7 @@ rm -f license.txt
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir}}
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir},%{_appdir}/wp-content/languages}
 
 cp -R * $RPM_BUILD_ROOT%{_appdir}
 rm -f $RPM_BUILD_ROOT%{_appdir}/readme.html
@@ -68,6 +72,8 @@ ln -sf %{_appdir}/wp-secure.sh $RPM_BUILD_ROOT%{_bindir}/wp-secure
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
+install %{SOURCE6} $RPM_BUILD_ROOT%{_appdir}/wp-content/languages/pl_PL.po
+install %{SOURCE7} $RPM_BUILD_ROOT%{_appdir}/wp-content/languages/pl_PL.mo
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -125,6 +131,7 @@ fi
 %attr(640,root,http) %{_appdir}/wp-content/themes/default/*.css
 %attr(640,root,http) %{_appdir}/wp-content/themes/default/images/*
 %{_appdir}/wp-content/index.php
+%{_appdir}/wp-content/languages
 %{_appdir}/wp-content/themes/default/screenshot.png
 %{_appdir}/wp-admin
 %{_appdir}/wp-includes
