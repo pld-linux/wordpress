@@ -20,6 +20,10 @@ Source6:	http://wordpress-polska.org/system/files/pl_PL_0.po
 Source7:	http://wordpress-polska.org/system/files/pl_PL_0.mo
 # Source7-md5:	4ec7fff754ce3cbdccfde7fc58d98af6
 URL:		http://wordpress.org/
+# http://securitytracker.com/alerts/2008/Sep/1020869.html
+# Upgrade to 2.6.2 or patch needed:
+BuildRequires:	security(CVE-2008-4106)
+BuildRequires:	security(CVE-2008-4107)
 Requires:	php(gettext)
 Requires:	php(mysql)
 Requires:	php(pcre)
