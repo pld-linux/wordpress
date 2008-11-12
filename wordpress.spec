@@ -4,12 +4,12 @@
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	2.3.3
+Version:	2.6.3
 Release:	1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
-# Source0-md5:	19518de1117aa68f0c3de84b6858efc3
+# Source0-md5:	c3300c2b615861f3bfffdd9701e8dd97
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
@@ -20,10 +20,6 @@ Source6:	http://wordpress-polska.org/system/files/pl_PL_0.po
 Source7:	http://wordpress-polska.org/system/files/pl_PL_0.mo
 # Source7-md5:	4ec7fff754ce3cbdccfde7fc58d98af6
 URL:		http://wordpress.org/
-# http://securitytracker.com/alerts/2008/Sep/1020869.html
-# Upgrade to 2.6.2 or patch needed:
-BuildRequires:	security(CVE-2008-4106)
-BuildRequires:	security(CVE-2008-4107)
 Requires:	php(gettext)
 Requires:	php(mysql)
 Requires:	php(pcre)
