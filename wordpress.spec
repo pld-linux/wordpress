@@ -15,10 +15,10 @@ Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	%{name}.conf
 Source5:	%{name}-lighttpd.conf
-Source6:	http://wordpress-polska.org/system/files/pl_PL_0.po
-# Source6-md5:	0b1d193435065c98e12ac188232f190f
-Source7:	http://wordpress-polska.org/system/files/pl_PL_0.mo
-# Source7-md5:	4ec7fff754ce3cbdccfde7fc58d98af6
+Source6:	http://kubazwolinski.com/downloads/pl_PL.po
+# Source6-md5:	4ac57f4d9664195abf8fbce2da2fa87d
+Source7:	http://kubazwolinski.com/downloads/pl_PL.mo
+# Source7-md5:	99fb334fab82f78c4b8c5cb22360959a
 URL:		http://wordpress.org/
 Requires:	php(gettext)
 Requires:	php(mysql)
