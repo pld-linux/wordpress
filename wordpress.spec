@@ -4,12 +4,12 @@
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	2.6.3
+Version:	2.6.5
 Release:	1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/latest.tar.gz
-# Source0-md5:	c3300c2b615861f3bfffdd9701e8dd97
+# Source0-md5:	066433e2b6d090e7d4c4cce49cf9b232
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
@@ -20,7 +20,6 @@ Source6:	http://kubazwolinski.com/downloads/pl_PL.po
 Source7:	http://kubazwolinski.com/downloads/pl_PL.mo
 # Source7-md5:	99fb334fab82f78c4b8c5cb22360959a
 URL:		http://wordpress.org/
-BuildRequires:	security(http://wordpress.org/development/2008/11/wordpress-265/)
 Requires:	php(gettext)
 Requires:	php(mysql)
 Requires:	php(pcre)
