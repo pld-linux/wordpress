@@ -20,6 +20,7 @@ Source6:	http://kubazwolinski.com/downloads/pl_PL.po
 Source7:	http://kubazwolinski.com/downloads/pl_PL.mo
 # Source7-md5:	99fb334fab82f78c4b8c5cb22360959a
 URL:		http://wordpress.org/
+BuildRequires:	security(http://wordpress.org/development/2008/11/wordpress-265/)
 Requires:	php(gettext)
 Requires:	php(mysql)
 Requires:	php(pcre)
