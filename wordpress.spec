@@ -1,15 +1,14 @@
 # TODO
 # - put config files to %{_sysconfdir}!
-# - switch to versioned url: ftp://ftp.openpkg.org/sources/CPY/VERSIONED/00README
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	2.6.5
+Version:	2.7
 Release:	1
 License:	GPL
 Group:		Applications/Publishing
-Source0:	http://wordpress.org/latest.tar.gz
-# Source0-md5:	066433e2b6d090e7d4c4cce49cf9b232
+Source0:	http://wordpress.org/wordpress-%{version}.tar.gz
+# Source0-md5:	a86a8780fa2d2af67d89b02e26cf0c7c
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
