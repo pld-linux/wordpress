@@ -1,29 +1,28 @@
-# TODO
-# - put config files to %{_sysconfdir}!
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	2.7.1
-Release:	1
+Release:	1.5
 License:	GPL
 Group:		Applications/Publishing
-Source0:	http://wordpress.org/wordpress-%{version}.tar.gz
+Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
 # Source0-md5:	3f1e1607e5ce1328c305e0192ff3352a
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
-Source4:	%{name}.conf
+Source4:	%{name}-apache.conf
 Source5:	%{name}-lighttpd.conf
 Source6:	http://kubazwolinski.com/downloads/pl_PL.po
 # Source6-md5:	4ac57f4d9664195abf8fbce2da2fa87d
 Source7:	http://kubazwolinski.com/downloads/pl_PL.mo
 # Source7-md5:	99fb334fab82f78c4b8c5cb22360959a
+Patch0:		%{name}.patch
 URL:		http://wordpress.org/
-Requires:	php(gettext)
-Requires:	php(mysql)
-Requires:	php(pcre)
-Requires:	php(xml)
-Requires:	php(xmlrpc)
+Requires:	php-gettext
+Requires:	php-mysql
+Requires:	php-pcre
+Requires:	php-xml
+Requires:	php-xmlrpc
 Requires:	webapps
 Requires:	webserver(php) >= 5.0
 BuildArch:	noarch
@@ -53,20 +52,43 @@ PHP i MySQL oraz na licencji GPL. Jest oficjalnym następcą b2/cafelog.
 WordPress jest nowym oprogramowaniem, ale jego korzenie i rozwój
 sięgają 2001 roku.
 
+%package setup
+Summary:	Wordpress setup package
+Summary(pl.UTF-8):	Pakiet do wstępnej konfiguracji Wordpress
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description setup
+Install this package to configure initial WordPress installation. You
+should uninstall this package when you're done, as it considered
+insecure to keep the setup files in place.
+
+%description setup -l pl.UTF-8
+Ten pakiet należy zainstalować w celu wstępnej konfiguracji WordPress
+po pierwszej instalacji. Potem należy go odinstalować, jako że
+pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
+
 %prep
 %setup -q -n %{name}
-cp %{SOURCE1} %{SOURCE2} %{SOURCE3} .
+%patch0 -p1
+cp %{SOURCE3} .
 rm -f license.txt
+
+find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir},%{_appdir}/wp-content/languages}
 
-cp -R * $RPM_BUILD_ROOT%{_appdir}
+cp -a . $RPM_BUILD_ROOT%{_appdir}
+cp -a wp-config-sample.php $RPM_BUILD_ROOT%{_sysconfdir}/wp-config.php
 rm -f $RPM_BUILD_ROOT%{_appdir}/readme.html
 rm -f $RPM_BUILD_ROOT%{_appdir}/wp-setup.txt
-ln -sf %{_appdir}/wp-setup.sh $RPM_BUILD_ROOT%{_bindir}/wp-setup
-ln -sf %{_appdir}/wp-secure.sh $RPM_BUILD_ROOT%{_bindir}/wp-secure
+
+install %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/wp-secure
+install %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/wp-setup
+ln -s %{_bindir}/wp-setup $RPM_BUILD_ROOT%{_appdir}/wp-setup.sh
+ln -s %{_bindir}/wp-secure $RPM_BUILD_ROOT%{_appdir}/wp-secure.sh
 
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
@@ -78,16 +100,25 @@ install %{SOURCE7} $RPM_BUILD_ROOT%{_appdir}/wp-content/languages/pl_PL.mo
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ ! -f %{_appdir}/wp-config.php ]; then
-	install -oroot -ghttp -m640 %{_appdir}/wp-config-sample.php %{_appdir}/wp-config.php
-
+if [ "$1" = 1 ]; then
 	%banner -e %{name} <<-EOF
 	To finish your configuration DO NOT FORGET to:
 
 	1) Create some MySQL database owned by some user
-	2) Edit the file: %{_appdir}/wp-config.php
-	3) Run a browser and visit: http://`hostname`/wordpress/wp-admin/install.php
+	2) Edit the file: %{_sysconfdir}/wp-config.php
+	3) Install %{name}-setup
+	4) Run a browser and visit: http://`hostname`/wordpress/wp-admin/install.php
 EOF
+fi
+
+%post setup
+chmod 660 %{_sysconfdir}/wp-config.php
+chown root:http %{_sysconfdir}/wp-config.php
+
+%postun setup
+if [ "$1" = "0" ]; then
+	chmod 640 %{_sysconfdir}/wp-config.php
+	chown root:http %{_sysconfdir}/wp-config.php
 fi
 
 %triggerin -- apache1 < 1.3.37-3, apache1-base
@@ -115,27 +146,27 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/lighttpd.conf
+%attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/wp-config.php
 
 %dir %{_appdir}
-%dir %attr(750,root,http) %{_appdir}/wp-content
-%dir %attr(750,root,http) %{_appdir}/wp-content/plugins
-%dir %attr(750,root,http) %{_appdir}/wp-content/themes
-%dir %attr(750,root,http) %{_appdir}/wp-content/themes/classic
-%dir %attr(750,root,http) %{_appdir}/wp-content/themes/default
-%dir %attr(750,root,http) %{_appdir}/wp-content/themes/default/images
-%attr(640,root,http) %{_appdir}/wp-content/plugins/*.php
-%attr(640,root,http) %{_appdir}/wp-content/plugins/akismet
-%attr(640,root,http) %{_appdir}/wp-content/themes/classic/*
-%attr(640,root,http) %{_appdir}/wp-content/themes/default/*.php
-%attr(640,root,http) %{_appdir}/wp-content/themes/default/*.css
-%attr(640,root,http) %{_appdir}/wp-content/themes/default/images/*
-%{_appdir}/wp-content/index.php
-%{_appdir}/wp-content/languages
-%{_appdir}/wp-content/themes/default/screenshot.png
-%{_appdir}/wp-admin
-%{_appdir}/wp-includes
 %{_appdir}/*.php
-%{_appdir}/wp-secure.sh
-%{_appdir}/wp-setup.sh
+%{_appdir}/wp-includes
+%{_appdir}/wp-content/index.php
+%dir %{_appdir}/wp-content
+%dir %{_appdir}/wp-content/languages
+%lang(pl) %{_appdir}/wp-content/languages/pl_PL.*
+%dir %{_appdir}/wp-content/plugins
+%{_appdir}/wp-content/plugins/*.php
+%{_appdir}/wp-content/plugins/akismet
+
+%dir %{_appdir}/wp-content/themes
+%{_appdir}/wp-content/themes/classic
+%{_appdir}/wp-content/themes/default
+
+%files setup
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/wp-secure
 %attr(755,root,root) %{_bindir}/wp-setup
+%{_appdir}/wp-secure.sh
+%{_appdir}/wp-setup.sh
+%{_appdir}/wp-admin
