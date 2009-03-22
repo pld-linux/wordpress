@@ -1,0 +1,35 @@
+--- wordpress/wp-load.php~	2009-03-20 10:38:16.000000000 +0200
++++ wordpress/wp-load.php	2009-03-20 10:40:16.081599269 +0200
+@@ -21,7 +21,12 @@
+ 
+ error_reporting(E_ALL ^ E_NOTICE ^ E_USER_NOTICE);
+ 
+-if ( file_exists( ABSPATH . 'wp-config.php') ) {
++if ( file_exists( '/etc/webapps/wordpress/wp-config.php') ) {
++
++	/** The config file resides in WEBAPPS */
++	require_once( '/etc/webapps/wordpress/wp-config.php' );
++
++} elseif ( file_exists( ABSPATH . 'wp-config.php') ) {
+ 
+ 	/** The config file resides in ABSPATH */
+ 	require_once( ABSPATH . 'wp-config.php' );
+--- wordpress/wp-admin/setup-config.php~	2009-03-20 10:38:16.000000000 +0200
++++ wordpress/wp-admin/setup-config.php	2009-03-20 10:42:40.461577381 +0200
+@@ -155,7 +155,7 @@
+ 	if ( !empty($wpdb->error) )
+ 		wp_die($wpdb->error->get_error_message());
+ 
+-	$handle = fopen('../wp-config.php', 'w');
++	$handle = fopen('/etc/webapps/wordpress/wp-config.php', 'w');
+ 
+ 	foreach ($configFile as $line_num => $line) {
+ 		switch (substr($line,0,16)) {
+@@ -179,7 +179,6 @@
+ 		}
+ 	}
+ 	fclose($handle);
+-	chmod('../wp-config.php', 0666);
+ 
+ 	display_header();
+ ?>
