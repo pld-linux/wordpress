@@ -1,3 +1,5 @@
+# TODO
+# - gettext mo to system dir, add all possible languages?
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
@@ -12,10 +14,10 @@ Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	%{name}-apache.conf
 Source5:	%{name}-lighttpd.conf
-Source6:	http://kubazwolinski.com/downloads/pl_PL.po
-# Source6-md5:	4ac57f4d9664195abf8fbce2da2fa87d
-Source7:	http://kubazwolinski.com/downloads/pl_PL.mo
-# Source7-md5:	99fb334fab82f78c4b8c5cb22360959a
+Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/2.7/messages/et.mo
+# Source6-md5:	3b497940312c894071fcfa5db819255a
+Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/2.7/messages/pl_PL.mo
+# Source7-md5:	f3553a68db4d6e550e21e9c520a589a8
 Patch0:		%{name}.patch
 URL:		http://wordpress.org/
 Requires:	php-gettext
@@ -93,8 +95,8 @@ ln -s %{_bindir}/wp-secure $RPM_BUILD_ROOT%{_appdir}/wp-secure.sh
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
-install %{SOURCE6} $RPM_BUILD_ROOT%{_appdir}/wp-content/languages/pl_PL.po
-install %{SOURCE7} $RPM_BUILD_ROOT%{_appdir}/wp-content/languages/pl_PL.mo
+install %{SOURCE6} $RPM_BUILD_ROOT%{_appdir}/wp-content/languages
+install %{SOURCE7} $RPM_BUILD_ROOT%{_appdir}/wp-content/languages
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -154,7 +156,8 @@ fi
 %{_appdir}/wp-content/index.php
 %dir %{_appdir}/wp-content
 %dir %{_appdir}/wp-content/languages
-%lang(pl) %{_appdir}/wp-content/languages/pl_PL.*
+%lang(et) %{_appdir}/wp-content/languages/et.mo
+%lang(pl) %{_appdir}/wp-content/languages/pl_PL.mo
 %dir %{_appdir}/wp-content/plugins
 %{_appdir}/wp-content/plugins/*.php
 %{_appdir}/wp-content/plugins/akismet
