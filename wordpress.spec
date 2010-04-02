@@ -3,21 +3,21 @@
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	2.9.1
+Version:	2.9.2
 Release:	1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
-# Source0-md5:	3af6bfaac37faa6ba58294f3de29c311
+# Source0-md5:	6023fe6701476c8152bda5d4c6277c69
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	%{name}-apache.conf
 Source5:	%{name}-lighttpd.conf
-Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/2.7/messages/et.mo
-# Source6-md5:	3b497940312c894071fcfa5db819255a
-Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/2.7/messages/pl_PL.mo
-# Source7-md5:	f3553a68db4d6e550e21e9c520a589a8
+Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/2.9/messages/et.mo
+# Source6-md5:	b2d16a3bc8099fec4d19085fc3c3e122
+Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/2.9/messages/pl_PL.mo
+# Source7-md5:	8e50b17edb96ebd67d1d547dc78479e7
 Patch0:		%{name}.patch
 URL:		http://wordpress.org/
 Requires:	php-gettext
