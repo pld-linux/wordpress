@@ -85,7 +85,7 @@ cp %{SOURCE10} wp-includes/rss.php
 cp %{SOURCE11} wp-includes/rss-functions.php
 
 find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %undos
-find -name '*.orig' | xargs rm
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %install
 rm -rf $RPM_BUILD_ROOT
