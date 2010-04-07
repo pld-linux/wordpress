@@ -15,11 +15,12 @@ Source3:	wp-setup.txt
 Source4:	%{name}-apache.conf
 Source5:	%{name}-lighttpd.conf
 Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/2.9/messages/et.mo
-# Source6-md5:	b2d16a3bc8099fec4d19085fc3c3e122
+# Source6-md5:	7a3e3008c58a56e1c8777a9a1b404787
 Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/2.9/messages/pl_PL.mo
-# Source7-md5:	8e50b17edb96ebd67d1d547dc78479e7
+# Source7-md5:	a68aba62c7301da37ad0e05c1a5ca143
 Patch0:		%{name}.patch
 URL:		http://wordpress.org/
+BuildRequires:	rpm-build-macros >= 1.553
 Requires:	php-gettext
 Requires:	php-mysql
 Requires:	php-pcre
@@ -76,7 +77,8 @@ pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 cp %{SOURCE3} .
 rm -f license.txt
 
-find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %{__sed} -i -e 's,\r$,,'
+find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %undos
+find -name '*.orig' | xargs rm
 
 %install
 rm -rf $RPM_BUILD_ROOT
