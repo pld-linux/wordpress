@@ -4,7 +4,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	2.9.2
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -18,6 +18,9 @@ Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/2.9/messages/et.mo
 # Source6-md5:	7a3e3008c58a56e1c8777a9a1b404787
 Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/2.9/messages/pl_PL.mo
 # Source7-md5:	a68aba62c7301da37ad0e05c1a5ca143
+# MagpieRSS upgrade (version 0.8a) from feedwordpress plugin: http://feedwordpress.radgeek.com/
+Source10:	rss.php
+Source11:	rss-functions.php
 Patch0:		%{name}.patch
 URL:		http://wordpress.org/
 BuildRequires:	rpm-build-macros >= 1.553
@@ -76,6 +79,10 @@ pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 %patch0 -p1
 cp %{SOURCE3} .
 rm -f license.txt
+
+# Install new MagpieRSS
+cp %{SOURCE10} wp-includes/rss.php
+cp %{SOURCE11} wp-includes/rss-functions.php
 
 find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %undos
 find -name '*.orig' | xargs rm
