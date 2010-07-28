@@ -1,29 +1,31 @@
 # TODO
 # - gettext mo to system dir, add all possible languages?
+# - merge changes from wpmu.spec
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	2.9.2
-Release:	2
+Version:	3.0
+Release:	0.1
 License:	GPL
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
-# Source0-md5:	6023fe6701476c8152bda5d4c6277c69
+# Source0-md5:	cba15b344d53654255394769e4c865af
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	%{name}-apache.conf
 Source5:	%{name}-lighttpd.conf
-Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/2.9/messages/et.mo
-# Source6-md5:	7a3e3008c58a56e1c8777a9a1b404787
-Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/2.9/messages/pl_PL.mo
-# Source7-md5:	a68aba62c7301da37ad0e05c1a5ca143
+Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/3.0/messages/et.po
+# Source6-md5:	faccf42481d5bf742b019c24a3c6251a
+Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/3.0/messages/pl_PL.po
+# Source7-md5:	8c9038410b596f9c705cc006dcdd5960
 # MagpieRSS upgrade (version 0.8a) from feedwordpress plugin: http://feedwordpress.radgeek.com/
 Source10:	rss.php
 Source11:	rss-functions.php
 Patch0:		%{name}.patch
-URL:		http://wordpress.org/
-BuildRequires:	rpm-build-macros >= 1.553
+URL:		http://www.wordpress.org/
+BuildRequires:	gettext-devel
+BuildRequires:	rpmbuild(macros) >= 1.553
 Requires:	php-gettext
 Requires:	php-mysql
 Requires:	php-pcre
@@ -75,17 +77,28 @@ po pierwszej instalacji. Potem należy go odinstalować, jako że
 pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 
 %prep
-%setup -q -n %{name}
+%setup -qc
+mv %{name}/* . && rmdir %{name}
 %patch0 -p1
-cp %{SOURCE3} .
+cp -a %{SOURCE3} .
 rm -f license.txt
 
-# Install new MagpieRSS
-cp %{SOURCE10} wp-includes/rss.php
-cp %{SOURCE11} wp-includes/rss-functions.php
+rm wp-content/themes/index.php
+rm wp-content/plugins/index.php
+rm wp-content/index.php
 
-find '(' -name '*.php' -o -name '*.js' -o -name '*.html' ')' -print0 | xargs -0 %undos
+# Install new MagpieRSS
+# NOTE: this is deprecated, simplepie should be used instead
+cp -a %{SOURCE10} wp-includes/rss.php
+cp -a %{SOURCE11} wp-includes/rss-functions.php
+
+%undos -f php,js,html
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
+
+%build
+install -d wp-content/languages
+msgfmt --statistics %{SOURCE6} -o wp-content/languages/et.mo
+msgfmt --statistics %{SOURCE7} -o wp-content/languages/pl_PL.mo
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -96,16 +109,14 @@ cp -a wp-config-sample.php $RPM_BUILD_ROOT%{_sysconfdir}/wp-config.php
 rm -f $RPM_BUILD_ROOT%{_appdir}/readme.html
 rm -f $RPM_BUILD_ROOT%{_appdir}/wp-setup.txt
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/wp-secure
-install %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/wp-setup
+install -p %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/wp-secure
+install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/wp-setup
 ln -s %{_bindir}/wp-setup $RPM_BUILD_ROOT%{_appdir}/wp-setup.sh
 ln -s %{_bindir}/wp-secure $RPM_BUILD_ROOT%{_appdir}/wp-secure.sh
 
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
-install %{SOURCE6} $RPM_BUILD_ROOT%{_appdir}/wp-content/languages
-install %{SOURCE7} $RPM_BUILD_ROOT%{_appdir}/wp-content/languages
+cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -a %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -162,7 +173,6 @@ fi
 %dir %{_appdir}
 %{_appdir}/*.php
 %{_appdir}/wp-includes
-%{_appdir}/wp-content/index.php
 %dir %{_appdir}/wp-content
 %dir %{_appdir}/wp-content/languages
 %lang(et) %{_appdir}/wp-content/languages/et.mo
@@ -172,8 +182,7 @@ fi
 %{_appdir}/wp-content/plugins/akismet
 
 %dir %{_appdir}/wp-content/themes
-%{_appdir}/wp-content/themes/classic
-%{_appdir}/wp-content/themes/default
+%{_appdir}/wp-content/themes/twentyten
 
 %files setup
 %defattr(644,root,root,755)
