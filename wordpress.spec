@@ -13,8 +13,8 @@ Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
-Source4:	%{name}-apache.conf
-Source5:	%{name}-lighttpd.conf
+Source4:	apache.conf
+Source5:	lighttpd.conf
 Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/%{version}/messages/et.po
 # Source6-md5:	7ee698806091573a534a4889f88d6d97
 Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/%{version}/messages/pl_PL.po
