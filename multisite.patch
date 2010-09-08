@@ -43,8 +43,8 @@
  		$dir = rtrim( $dir, DIRECTORY_SEPARATOR );
  		$top_dir = $dir;
  		$stack = array($dir);
---- wordpress-3.0.1/wp-admin/network.php~	2010-09-08 18:39:08.000000000 +0300
-+++ wordpress-3.0.1/wp-admin/network.php	2010-09-08 18:41:39.993826475 +0300
+--- wordpress-3.0.1/wp-admin/network.php	2010-09-08 18:41:39.993826475 +0300
++++ wordpress-3.0.1/wp-admin/network.php	2010-09-08 18:48:16.814203165 +0300
 @@ -96,7 +96,7 @@
  	'<p>' . __('This screen allows you to configure a network as having subdomains (<code>site1.example.com</code>) or subdirectories (<code>example.com/site1</code>). Subdomains require wildcard subdomains to be enabled in Apache and DNS records, if your host allows it.') . '</p>' .
  	'<p>' . __('Choose subdomains or subdirectories; this can only be switched afterwards by reconfiguring your install. Fill out the network details, and click install. If this does not work, you may have to add a wildcard DNS record (for subdomains) or change to another setting in Permalinks (for subdirectories).') . '</p>' .
@@ -54,14 +54,22 @@
  	'<p>' . __('Refreshing your browser will take you to a screen with an archive of those added lines of code. A set of six links under Super Admin will appear at the top of the main left navigation menu. The multisite network is now enabled.') . '</p>' .
  	'<p>' . __('The choice of subdirectory sites is disabled if this setup is more than a month old because of permalink problems with &#8220;/blog/&#8221; from the main site. This disabling will be addressed soon in a future version.') . '</p>' .
  	'<p><strong>' . __('For more information:') . '</strong></p>' .
-@@ -324,7 +324,6 @@
+@@ -323,11 +323,12 @@
+ 	}
  ?>
  		<ol>
- 			<li><p><?php
+-			<li><p><?php
 -				printf( __( 'Create a <code>blogs.dir</code> directory in <code>%s</code>. This directory is used to stored uploaded media for your additional sites and must be writeable by the web server.' ), WP_CONTENT_DIR );
++			<?php
  				if ( WP_CONTENT_DIR != ABSPATH . 'wp-content' )
++					echo '<li><p>';
  					echo ' <strong>' . __('Warning:') . ' ' . __( 'Networks may not be fully compatible with custom wp-content directories.' ) . '</strong';
- 			?></p></li>
+-			?></p></li>
++					echo '</p></li>';
++			?>
+ 			<li><p><?php printf( __( 'Add the following to your <code>wp-config.php</code> file in <code>%s</code> <strong>above</strong> the line reading <code>/* That&#8217;s all, stop editing! Happy blogging. */</code>:' ), ABSPATH ); ?></p>
+ 				<textarea class="code" readonly="readonly" cols="100" rows="7">
+ define( 'MULTISITE', true );
 --- wordpress-3.0.1/wp-includes/ms-functions.php~	2010-09-08 18:39:08.000000000 +0300
 +++ wordpress-3.0.1/wp-includes/ms-functions.php	2010-09-08 18:43:02.557151530 +0300
 @@ -902,7 +902,7 @@
