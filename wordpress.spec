@@ -5,7 +5,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.8
+Release:	0.10
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -19,24 +19,31 @@ Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/%{version}/messages/et
 # Source6-md5:	7ee698806091573a534a4889f88d6d97
 Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/%{version}/messages/pl_PL.po
 # Source7-md5:	795864c6eeeadcc74b8ea70d45f22e9f
-# MagpieRSS upgrade (version 0.8a) from feedwordpress plugin: http://feedwordpress.radgeek.com/
-Source10:	rss.php
-Source11:	rss-functions.php
 Patch0:		configpath.patch
 Patch1:		multisite.patch
 Patch2:		%{name}.patch
+Patch3:		simplepie.patch
 URL:		http://www.wordpress.org/
 BuildRequires:	gettext-devel
 BuildRequires:	rpmbuild(macros) >= 1.553
 Requires:	php-gettext
 Requires:	php-mysql
 Requires:	php-pcre
+Requires:	php-simplepie >= 1.2
 Requires:	php-xml
 Requires:	php-xmlrpc
 Requires:	webapps
 Requires:	webserver(php) >= 5.0
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# no pear deps
+%define		_noautopear	pear
+
+%define		_noautophp	php-simplexml
+
+# put it together for rpmbuild
+%define		_noautoreq	%{?_noautophp} %{?_noautopear}
 
 %define		_appdir		%{_datadir}/%{name}
 %define		_webapps	/etc/webapps
@@ -124,10 +131,8 @@ rm wp-content/index.php
 # sample plugin
 rm wp-content/plugins/hello.php
 
-# Install new MagpieRSS
-# NOTE: this is deprecated, simplepie should be used instead
-cp -a %{SOURCE10} wp-includes/rss.php
-cp -a %{SOURCE11} wp-includes/rss-functions.php
+# system simplepie
+rm wp-includes/class-simplepie.php
 
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
@@ -217,6 +222,9 @@ fi
 %dir %{_appdir}/wp-content/mu-plugins
 %dir %{_appdir}/wp-content/themes
 
+# needed for daily moderation
+%{_appdir}/wp-admin
+
 %attr(775,root,http) /var/lib/%{name}
 %attr(775,root,http) /var/log/%{name}
 
@@ -226,7 +234,6 @@ fi
 %attr(755,root,root) %{_bindir}/wp-setup
 %{_appdir}/wp-secure.sh
 %{_appdir}/wp-setup.sh
-%{_appdir}/wp-admin
 
 %files plugin-akismet
 %defattr(644,root,root,755)
