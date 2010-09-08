@@ -5,7 +5,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.5
+Release:	0.6
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -77,6 +77,16 @@ Ten pakiet należy zainstalować w celu wstępnej konfiguracji WordPress
 po pierwszej instalacji. Potem należy go odinstalować, jako że
 pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 
+%package plugin-akismet
+Summary:	Wordpress Akismet Plugin
+Group:		Applications/WWW
+Requires:	%{name} = %{version}-%{release}
+
+%description plugin-akismet
+Akismet checks your comments against the Akismet web service to see if
+they look like spam or not and lets you review the spam it catches
+under your blog's "Comments" admin screen.
+
 %package theme-twentyten
 Summary:	Wordpress MU default theme
 Group:		Applications/WWW
@@ -108,6 +118,9 @@ rm -f license.txt
 rm wp-content/themes/index.php
 rm wp-content/plugins/index.php
 rm wp-content/index.php
+
+# sample plugin
+rm wp-content/plugins/hello.php
 
 # Install new MagpieRSS
 # NOTE: this is deprecated, simplepie should be used instead
@@ -200,9 +213,6 @@ fi
 %lang(pl) %{_appdir}/wp-content/languages/pl_PL.mo
 %dir %{_appdir}/wp-content/plugins
 %dir %{_appdir}/wp-content/mu-plugins
-%{_appdir}/wp-content/plugins/*.php
-%{_appdir}/wp-content/plugins/akismet
-
 %dir %{_appdir}/wp-content/themes
 
 %files setup
@@ -212,6 +222,13 @@ fi
 %{_appdir}/wp-secure.sh
 %{_appdir}/wp-setup.sh
 %{_appdir}/wp-admin
+
+%files plugin-akismet
+%defattr(644,root,root,755)
+%dir %{_appdir}/wp-content/plugins/akismet
+%doc %{_appdir}/wp-content/plugins/akismet/readme.txt
+%{_appdir}/wp-content/plugins/akismet/*.php
+%{_appdir}/wp-content/plugins/akismet/*.gif
 
 %files theme-twentyten
 %defattr(644,root,root,755)
