@@ -15,10 +15,10 @@ Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	%{name}-apache.conf
 Source5:	%{name}-lighttpd.conf
-Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/3.0/messages/et.po
-# Source6-md5:	faccf42481d5bf742b019c24a3c6251a
-Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/3.0/messages/pl_PL.po
-# Source7-md5:	8c9038410b596f9c705cc006dcdd5960
+Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/%{version}/messages/et.po
+# Source6-md5:	7ee698806091573a534a4889f88d6d97
+Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/%{version}/messages/pl_PL.po
+# Source7-md5:	795864c6eeeadcc74b8ea70d45f22e9f
 # MagpieRSS upgrade (version 0.8a) from feedwordpress plugin: http://feedwordpress.radgeek.com/
 Source10:	rss.php
 Source11:	rss-functions.php
