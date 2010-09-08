@@ -5,7 +5,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.3
+Release:	0.5
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -23,6 +23,7 @@ Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/%{version}/messages
 Source10:	rss.php
 Source11:	rss-functions.php
 Patch0:		%{name}.patch
+Patch1:		configpath.patch
 URL:		http://www.wordpress.org/
 BuildRequires:	gettext-devel
 BuildRequires:	rpmbuild(macros) >= 1.553
@@ -76,12 +77,31 @@ Ten pakiet należy zainstalować w celu wstępnej konfiguracji WordPress
 po pierwszej instalacji. Potem należy go odinstalować, jako że
 pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 
+%package theme-twentyten
+Summary:	Wordpress MU default theme
+Group:		Applications/WWW
+URL:		http://wordpress.org/extend/themes/twentyten
+Requires:	%{name} = %{version}-%{release}
+
+%description theme-twentyten
+The 2010 theme for WordPress is stylish, customizable, simple, and
+readable.
+
+Make it yours with a custom menu, header image, and background. Twenty
+Ten supports six widgetized areas (two in the sidebar, four in the
+footer) and featured images (thumbnails for gallery posts and custom
+header images for posts and pages). It includes stylesheets for print
+and the admin Visual Editor, special styles for posts in the "Asides"
+and "Gallery" categories, and has an optional one-column page template
+that removes the sidebar.
+
 %prep
 %setup -qc
 mv %{name}/* . && rmdir %{name}
 %undos -f php,js,html
 cp -a wp-config{-sample,}.php
 %patch0 -p1
+%patch1 -p1
 cp -a %{SOURCE3} .
 rm -f license.txt
 
@@ -184,7 +204,6 @@ fi
 %{_appdir}/wp-content/plugins/akismet
 
 %dir %{_appdir}/wp-content/themes
-%{_appdir}/wp-content/themes/twentyten
 
 %files setup
 %defattr(644,root,root,755)
@@ -193,3 +212,7 @@ fi
 %{_appdir}/wp-secure.sh
 %{_appdir}/wp-setup.sh
 %{_appdir}/wp-admin
+
+%files theme-twentyten
+%defattr(644,root,root,755)
+%{_appdir}/wp-content/themes/twentyten
