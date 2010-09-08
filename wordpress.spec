@@ -5,7 +5,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.2
+Release:	0.3
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -103,7 +103,7 @@ msgfmt --statistics %{SOURCE7} -o wp-content/languages/pl_PL.mo
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir},%{_appdir}/wp-content/languages}
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir},%{_appdir}/wp-content/{languages,mu-plugins}}
 
 cp -a . $RPM_BUILD_ROOT%{_appdir}
 mv $RPM_BUILD_ROOT{%{_appdir},%{_sysconfdir}}/wp-config.php
@@ -179,6 +179,7 @@ fi
 %lang(et) %{_appdir}/wp-content/languages/et.mo
 %lang(pl) %{_appdir}/wp-content/languages/pl_PL.mo
 %dir %{_appdir}/wp-content/plugins
+%dir %{_appdir}/wp-content/mu-plugins
 %{_appdir}/wp-content/plugins/*.php
 %{_appdir}/wp-content/plugins/akismet
 
