@@ -13,3 +13,63 @@
  /* That's all, stop editing! Happy blogging. */
  
  /** Absolute path to the WordPress directory. */
+--- wordpress-3.0.1/wp-includes/ms-default-constants.php~	2010-09-08 18:37:37.000000000 +0300
++++ wordpress-3.0.1/wp-includes/ms-default-constants.php	2010-09-08 18:37:39.450725426 +0300
+@@ -18,14 +18,14 @@
+ 	/** @since 3.0.0 */
+ 	// Base uploads dir relative to ABSPATH
+ 	if ( !defined( 'UPLOADBLOGSDIR' ) )
+-		define( 'UPLOADBLOGSDIR', 'wp-content/blogs.dir' );
++		define( 'UPLOADBLOGSDIR', '/var/lib/wordpress' );
+ 
+ 	/** @since 3.0.0 */
+ 	if ( !defined( 'UPLOADS' ) ) {
+ 		// Uploads dir relative to ABSPATH
+ 		define( 'UPLOADS', UPLOADBLOGSDIR . "/{$wpdb->blogid}/files/" );
+ 		if ( 'wp-content/blogs.dir' == UPLOADBLOGSDIR )
+-			define( 'BLOGUPLOADDIR', WP_CONTENT_DIR . "/blogs.dir/{$wpdb->blogid}/files/" );
++			define( 'BLOGUPLOADDIR', "/var/lib/wordpress/{$wpdb->blogid}/files/" );
+ 	}
+ }
+ 
+--- wordpress-3.0.1/wp-admin/includes/ms.php~	2010-09-08 18:39:08.000000000 +0300
++++ wordpress-3.0.1/wp-admin/includes/ms.php	2010-09-08 18:40:25.993923701 +0300
+@@ -88,7 +88,7 @@
+ 			$wpdb->query( "DROP TABLE IF EXISTS ". current( $drop_table ) ."" );
+ 		}
+ 		$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->blogs WHERE blog_id = %d", $blog_id ) );
+-		$dir = apply_filters( 'wpmu_delete_blog_upload_dir', WP_CONTENT_DIR . "/blogs.dir/{$blog_id}/files/", $blog_id );
++		$dir = apply_filters( 'wpmu_delete_blog_upload_dir', UPLOADBLOGSDIR . "/{$blog_id}/files/", $blog_id );
+ 		$dir = rtrim( $dir, DIRECTORY_SEPARATOR );
+ 		$top_dir = $dir;
+ 		$stack = array($dir);
+--- wordpress-3.0.1/wp-admin/network.php~	2010-09-08 18:39:08.000000000 +0300
++++ wordpress-3.0.1/wp-admin/network.php	2010-09-08 18:41:39.993826475 +0300
+@@ -96,7 +96,7 @@
+ 	'<p>' . __('This screen allows you to configure a network as having subdomains (<code>site1.example.com</code>) or subdirectories (<code>example.com/site1</code>). Subdomains require wildcard subdomains to be enabled in Apache and DNS records, if your host allows it.') . '</p>' .
+ 	'<p>' . __('Choose subdomains or subdirectories; this can only be switched afterwards by reconfiguring your install. Fill out the network details, and click install. If this does not work, you may have to add a wildcard DNS record (for subdomains) or change to another setting in Permalinks (for subdirectories).') . '</p>' .
+ 	'<p>' . __('The next screen for Network will give you individually-generated lines of code to add to your wp-config.php and .htaccess files. Make sure the settings of your FTP client make files starting with a dot visible, so that you can find .htaccess; you may have to create this file if it really is not there. Make backup copies of those two files.') . '</p>' .
+-	'<p>' . __('Add a <code>blogs.dir</code> directory under <code>/wp-content</code> and add the designated lines of code to wp-config.php (just before <code>/*...stop editing...*/</code>) and <code>.htaccess</code> (replacing the existing WordPress rules).') . '</p>' .
++	'<p>' . __('Add the designated lines of code to wp-config.php (just before <code>/*...stop editing...*/</code>) and <code>.htaccess</code> (replacing the existing WordPress rules).') . '</p>' .
+ 	'<p>' . __('Refreshing your browser will take you to a screen with an archive of those added lines of code. A set of six links under Super Admin will appear at the top of the main left navigation menu. The multisite network is now enabled.') . '</p>' .
+ 	'<p>' . __('The choice of subdirectory sites is disabled if this setup is more than a month old because of permalink problems with &#8220;/blog/&#8221; from the main site. This disabling will be addressed soon in a future version.') . '</p>' .
+ 	'<p><strong>' . __('For more information:') . '</strong></p>' .
+@@ -324,7 +324,6 @@
+ ?>
+ 		<ol>
+ 			<li><p><?php
+-				printf( __( 'Create a <code>blogs.dir</code> directory in <code>%s</code>. This directory is used to stored uploaded media for your additional sites and must be writeable by the web server.' ), WP_CONTENT_DIR );
+ 				if ( WP_CONTENT_DIR != ABSPATH . 'wp-content' )
+ 					echo ' <strong>' . __('Warning:') . ' ' . __( 'Networks may not be fully compatible with custom wp-content directories.' ) . '</strong';
+ 			?></p></li>
+--- wordpress-3.0.1/wp-includes/ms-functions.php~	2010-09-08 18:39:08.000000000 +0300
++++ wordpress-3.0.1/wp-includes/ms-functions.php	2010-09-08 18:43:02.557151530 +0300
+@@ -902,7 +902,7 @@
+ 	update_option('siteurl', $url);
+ 	update_option('home', $url);
+ 	update_option('fileupload_url', $url . "files" );
+-	update_option('upload_path', "wp-content/blogs.dir/" . $blog_id . "/files");
++	update_option('upload_path', UPLOADBLOGSDIR . "/" . $blog_id . "/files");
+ 	update_option('blogname', stripslashes( $blog_title ) );
+ 	update_option('admin_email', '');
+ 	$wpdb->update( $wpdb->options, array('option_value' => ''), array('option_name' => 'admin_email') );

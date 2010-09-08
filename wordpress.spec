@@ -5,7 +5,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.7
+Release:	0.8
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -23,7 +23,7 @@ Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/%{version}/messages
 Source10:	rss.php
 Source11:	rss-functions.php
 Patch0:		configpath.patch
-Patch1:		allow-multisite.patch
+Patch1:		multisite.patch
 Patch2:		%{name}.patch
 URL:		http://www.wordpress.org/
 BuildRequires:	gettext-devel
@@ -138,7 +138,7 @@ msgfmt --statistics %{SOURCE7} -o wp-content/languages/pl_PL.mo
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir},%{_appdir}/wp-content/{languages,mu-plugins}}
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir},%{_appdir}/wp-content/{languages,mu-plugins},/var/{lib,log}/%{name}}
 
 cp -a . $RPM_BUILD_ROOT%{_appdir}
 mv $RPM_BUILD_ROOT{%{_appdir},%{_sysconfdir}}/wp-config.php
@@ -216,6 +216,9 @@ fi
 %dir %{_appdir}/wp-content/plugins
 %dir %{_appdir}/wp-content/mu-plugins
 %dir %{_appdir}/wp-content/themes
+
+%attr(775,root,http) /var/lib/%{name}
+%attr(775,root,http) /var/log/%{name}
 
 %files setup
 %defattr(644,root,root,755)
