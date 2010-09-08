@@ -5,7 +5,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.1
+Release:	0.2
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -79,6 +79,8 @@ pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 %prep
 %setup -qc
 mv %{name}/* . && rmdir %{name}
+%undos -f php,js,html
+cp -a wp-config{-sample,}.php
 %patch0 -p1
 cp -a %{SOURCE3} .
 rm -f license.txt
@@ -92,7 +94,6 @@ rm wp-content/index.php
 cp -a %{SOURCE10} wp-includes/rss.php
 cp -a %{SOURCE11} wp-includes/rss-functions.php
 
-%undos -f php,js,html
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %build
@@ -105,7 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_sysconfdir},%{_appdir}/wp-content/languages}
 
 cp -a . $RPM_BUILD_ROOT%{_appdir}
-cp -a wp-config-sample.php $RPM_BUILD_ROOT%{_sysconfdir}/wp-config.php
+mv $RPM_BUILD_ROOT{%{_appdir},%{_sysconfdir}}/wp-config.php
 rm -f $RPM_BUILD_ROOT%{_appdir}/readme.html
 rm -f $RPM_BUILD_ROOT%{_appdir}/wp-setup.txt
 

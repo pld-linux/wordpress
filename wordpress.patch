@@ -25,3 +25,22 @@
  		foreach( $configFile as $line ) {
  			fwrite($handle, $line);
  		}
+--- wordpress-3.0.1/wp-config.php~	2010-09-08 12:02:37.000000000 +0300
++++ wordpress-3.0.1/wp-config.php	2010-09-08 12:05:20.193097026 +0300
+@@ -16,13 +16,13 @@
+ 
+ // ** MySQL settings - You can get this info from your web host ** //
+ /** The name of the database for WordPress */
+-define('DB_NAME', 'database_name_here');
++define('DB_NAME', 'wordpress');
+ 
+ /** MySQL database username */
+-define('DB_USER', 'username_here');
++define('DB_USER', 'mysql');
+ 
+ /** MySQL database password */
+-define('DB_PASSWORD', 'password_here');
++define('DB_PASSWORD', '');
+ 
+ /** MySQL hostname */
+ define('DB_HOST', 'localhost');
