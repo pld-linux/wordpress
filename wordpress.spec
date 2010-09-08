@@ -5,7 +5,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.6
+Release:	0.7
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -22,8 +22,9 @@ Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/%{version}/messages
 # MagpieRSS upgrade (version 0.8a) from feedwordpress plugin: http://feedwordpress.radgeek.com/
 Source10:	rss.php
 Source11:	rss-functions.php
-Patch0:		%{name}.patch
-Patch1:		configpath.patch
+Patch0:		configpath.patch
+Patch1:		allow-multisite.patch
+Patch2:		%{name}.patch
 URL:		http://www.wordpress.org/
 BuildRequires:	gettext-devel
 BuildRequires:	rpmbuild(macros) >= 1.553
@@ -109,9 +110,10 @@ that removes the sidebar.
 %setup -qc
 mv %{name}/* . && rmdir %{name}
 %undos -f php,js,html
-cp -a wp-config{-sample,}.php
 %patch0 -p1
 %patch1 -p1
+cp -a wp-config{-sample,}.php
+%patch2 -p1
 cp -a %{SOURCE3} .
 rm -f license.txt
 

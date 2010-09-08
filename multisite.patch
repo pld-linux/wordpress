@@ -1,0 +1,15 @@
+--- wordpress-3.0.1/wp-config-sample.php	2010-09-08 18:03:29.421631471 +0300
++++ wordpress-3.0.1/wp-config-sample.php	2010-09-08 18:28:37.181139000 +0300
+@@ -80,6 +80,12 @@
+  */
+ define('WP_DEBUG', false);
+ 
++/**
++ * Options for setting up Multisite.
++ * @see http://codex.wordpress.org/Create_A_Network
++ */
++define('WP_ALLOW_MULTISITE', false);
++
+ /* That's all, stop editing! Happy blogging. */
+ 
+ /** Absolute path to the WordPress directory. */
