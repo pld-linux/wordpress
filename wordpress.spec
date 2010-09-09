@@ -1,11 +1,13 @@
 # TODO
 # - gettext mo to system dir, add all possible languages?
 # - merge changes from wpmu.spec
+%include	/usr/lib/rpm/macros.php
+%define		php_min_version 5.2.1
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.10
+Release:	0.11
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -25,22 +27,31 @@ Patch2:		%{name}.patch
 Patch3:		simplepie.patch
 URL:		http://www.wordpress.org/
 BuildRequires:	gettext-devel
+BuildRequires:	rpm-php-pearprov
 BuildRequires:	rpmbuild(macros) >= 1.553
+Requires:	php-common >= 4:%{php_min_version}
+Requires:	php-date
+Requires:	php-dom
 Requires:	php-gettext
+Requires:	php-hash
+Requires:	php-iconv
+Requires:	php-json
+Requires:	php-mbstring
 Requires:	php-mysql
 Requires:	php-pcre
 Requires:	php-simplepie >= 1.2
+Requires:	php-spl
+Requires:	php-tokenizer
 Requires:	php-xml
-Requires:	php-xmlrpc
 Requires:	webapps
-Requires:	webserver(php) >= 5.0
+Requires:	webserver(php)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # no pear deps
 %define		_noautopear	pear
 
-%define		_noautophp	php-simplexml
+%define		_noautophp	php-ftp php-gd php-openssl php-simplexml
 
 # put it together for rpmbuild
 %define		_noautoreq	%{?_noautophp} %{?_noautopear}
