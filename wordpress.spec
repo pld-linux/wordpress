@@ -7,7 +7,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.11
+Release:	0.12
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -25,10 +25,14 @@ Patch0:		configpath.patch
 Patch1:		multisite.patch
 Patch2:		%{name}.patch
 Patch3:		simplepie.patch
+Patch4:		pear-text-diff.patch
+Patch5:		atomlib.patch
 URL:		http://www.wordpress.org/
 BuildRequires:	gettext-devel
 BuildRequires:	rpm-php-pearprov
 BuildRequires:	rpmbuild(macros) >= 1.553
+Requires:	js-swfobject >= 2.1
+Requires:	php-atomlib >= 0.4
 Requires:	php-common >= 4:%{php_min_version}
 Requires:	php-date
 Requires:	php-dom
@@ -39,6 +43,7 @@ Requires:	php-json
 Requires:	php-mbstring
 Requires:	php-mysql
 Requires:	php-pcre
+Requires:	php-pear-Text_Diff
 Requires:	php-simplepie >= 1.2
 Requires:	php-spl
 Requires:	php-tokenizer
@@ -132,18 +137,35 @@ mv %{name}/* . && rmdir %{name}
 %patch1 -p1
 cp -a wp-config{-sample,}.php
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
 cp -a %{SOURCE3} .
-rm -f license.txt
 
+rm license.txt
 rm wp-content/themes/index.php
 rm wp-content/plugins/index.php
 rm wp-content/index.php
 
+# remove *.dev js/.css
+find -name *.dev.js | xargs rm -v
+find -name *.dev.css | xargs rm -v
+
 # sample plugin
 rm wp-content/plugins/hello.php
 
+# system swfobject
+rm wp-includes/js/swfobject.js
+
 # system simplepie
 rm wp-includes/class-simplepie.php
+
+# system php-pear-Text_Diff
+rm -r wp-includes/Text/Diff*
+rmdir wp-includes/Text
+
+# system atomlib
+rm wp-includes/atomlib.php
 
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
