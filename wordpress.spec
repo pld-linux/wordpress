@@ -7,7 +7,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.12
+Release:	0.13
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -27,6 +27,7 @@ Patch2:		%{name}.patch
 Patch3:		simplepie.patch
 Patch4:		pear-text-diff.patch
 Patch5:		atomlib.patch
+Patch6:		swfobject.patch
 URL:		http://www.wordpress.org/
 BuildRequires:	gettext-devel
 BuildRequires:	rpm-php-pearprov
@@ -140,6 +141,7 @@ cp -a wp-config{-sample,}.php
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 cp -a %{SOURCE3} .
 
 rm license.txt

@@ -1,0 +1,11 @@
+--- wordpress-3.0.1/wp-includes/script-loader.php~	2010-09-09 16:21:19.000000000 +0300
++++ wordpress-3.0.1/wp-includes/script-loader.php	2010-09-09 16:26:18.913290221 +0300
+@@ -176,7 +176,7 @@
+ 
+ 	$scripts->add( 'jcrop', "/wp-includes/js/jcrop/jquery.Jcrop$suffix.js", array('jquery'), '0.9.8');
+ 
+-	$scripts->add( 'swfobject', "/wp-includes/js/swfobject.js", false, '2.2');
++	$scripts->add( 'swfobject', "/js/swfobject.js", false, '2.2');
+ 
+ 	$scripts->add( 'swfupload', '/wp-includes/js/swfupload/swfupload.js', false, '2201');
+ 	$scripts->add( 'swfupload-swfobject', '/wp-includes/js/swfupload/plugins/swfupload.swfobject.js', array('swfupload', 'swfobject'), '2201');
