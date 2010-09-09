@@ -7,7 +7,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.13
+Release:	0.14
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -28,6 +28,7 @@ Patch3:		simplepie.patch
 Patch4:		pear-text-diff.patch
 Patch5:		atomlib.patch
 Patch6:		swfobject.patch
+Patch7:		phpmailer.patch
 URL:		http://www.wordpress.org/
 BuildRequires:	gettext-devel
 BuildRequires:	rpm-php-pearprov
@@ -45,6 +46,7 @@ Requires:	php-mbstring
 Requires:	php-mysql
 Requires:	php-pcre
 Requires:	php-pear-Text_Diff
+Requires:	php-phpmailer >= 2.0.4
 Requires:	php-simplepie >= 1.2
 Requires:	php-spl
 Requires:	php-tokenizer
@@ -168,6 +170,13 @@ rmdir wp-includes/Text
 
 # system atomlib
 rm wp-includes/atomlib.php
+
+# system phpmailer
+rm wp-includes/class-phpmailer.php
+rm wp-includes/class-smtp.php
+
+# php 5.2 + json ext satisfies this compat
+rm wp-includes/class-json.php
 
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
