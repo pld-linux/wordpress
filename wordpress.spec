@@ -7,7 +7,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.1
-Release:	0.15
+Release:	0.16
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -144,6 +144,7 @@ cp -a wp-config{-sample,}.php
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 cp -a %{SOURCE3} .
 
 rm license.txt
