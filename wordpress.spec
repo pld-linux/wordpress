@@ -6,21 +6,21 @@
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	3.0.1
-Release:	0.16
+Version:	3.0.4
+Release:	0.1
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
-# Source0-md5:	8fa5373ed805fb9a6ee56dfd236dcb64
+# Source0-md5:	a455e0834eb2c8994c35acf3c13ddc11
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	apache.conf
 Source5:	lighttpd.conf
 Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/%{version}/messages/et.po
-# Source6-md5:	7ee698806091573a534a4889f88d6d97
+# Source6-md5:	faccf42481d5bf742b019c24a3c6251a
 Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/%{version}/messages/pl_PL.po
-# Source7-md5:	795864c6eeeadcc74b8ea70d45f22e9f
+# Source7-md5:	8c9038410b596f9c705cc006dcdd5960
 Patch0:		configpath.patch
 Patch1:		multisite.patch
 Patch2:		%{name}.patch
