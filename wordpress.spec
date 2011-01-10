@@ -7,7 +7,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.4
-Release:	0.1
+Release:	1
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
