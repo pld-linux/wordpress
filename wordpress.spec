@@ -7,7 +7,7 @@ Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
 Version:	3.0.4
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
@@ -34,23 +34,23 @@ BuildRequires:	gettext-devel
 BuildRequires:	rpm-php-pearprov
 BuildRequires:	rpmbuild(macros) >= 1.553
 Requires:	js-swfobject >= 2.1
+Requires:	php(dom)
+Requires:	php(gettext)
+Requires:	php(hash)
+Requires:	php(iconv)
+Requires:	php(json)
+Requires:	php(mbstring)
+Requires:	php(mysql)
+Requires:	php(pcre)
+Requires:	php(spl)
+Requires:	php(tokenizer)
+Requires:	php(xml)
 Requires:	php-atomlib >= 0.4
 Requires:	php-common >= 4:%{php_min_version}
 Requires:	php-date
-Requires:	php-dom
-Requires:	php-gettext
-Requires:	php-hash
-Requires:	php-iconv
-Requires:	php-json
-Requires:	php-mbstring
-Requires:	php-mysql
-Requires:	php-pcre
 Requires:	php-pear-Text_Diff
 Requires:	php-phpmailer >= 2.0.4
 Requires:	php-simplepie >= 1.2
-Requires:	php-spl
-Requires:	php-tokenizer
-Requires:	php-xml
 Requires:	webapps
 Requires:	webserver(php)
 BuildArch:	noarch
