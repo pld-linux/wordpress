@@ -14,15 +14,15 @@
  
  	/** The config file resides in ABSPATH */
  	require_once( ABSPATH . 'wp-config.php' );
---- wordpress/wp-admin/setup-config.php.orig	2009-11-20 05:11:01.000000000 +0100
-+++ wordpress/wp-admin/setup-config.php	2010-01-23 19:09:28.000000000 +0100
-@@ -199,7 +199,7 @@
- <p class="step"><a href="install.php" class="button">Run the install</a></p>
+--- wordpress-3.5.1/wp-admin/setup-config.php~	2013-02-06 16:21:34.000000000 +0200
++++ wordpress-3.5.1/wp-admin/setup-config.php	2013-02-06 16:22:14.098004158 +0200
+@@ -275,7 +275,7 @@
+ </script>
  <?php
  	else :
 -		$handle = fopen(ABSPATH . 'wp-config.php', 'w');
 +		$handle = fopen(ABSPATH . '/etc/webapps/wordpress/wp-config.php', 'w');
- 		foreach( $configFile as $line ) {
+ 		foreach( $config_file as $line ) {
  			fwrite($handle, $line);
  		}
 --- wordpress-3.0.1/wp-config.php~	2010-09-08 12:02:37.000000000 +0300
