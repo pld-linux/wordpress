@@ -21,6 +21,7 @@ Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/%{version}/messages/et
 # Source6-md5:	faccf42481d5bf742b019c24a3c6251a
 Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/%{version}/messages/pl_PL.po
 # Source7-md5:	8c9038410b596f9c705cc006dcdd5960
+Source8:	httpd.conf
 Patch0:		configpath.patch
 Patch1:		multisite.patch
 Patch2:		%{name}.patch
@@ -53,6 +54,7 @@ Requires:	php-phpmailer >= 2.0.4
 Requires:	php-simplepie >= 1.2
 Requires:	webapps
 Requires:	webserver(php)
+Conflicts:	apache-base < 2.4.0-1
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -200,8 +202,8 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/wp-setup
 ln -s %{_bindir}/wp-setup $RPM_BUILD_ROOT%{_appdir}/wp-setup.sh
 ln -s %{_bindir}/wp-secure $RPM_BUILD_ROOT%{_appdir}/wp-secure.sh
 
-cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -a %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 
 %clean
@@ -238,10 +240,10 @@ fi
 %triggerun -- apache1 < 1.3.37-3, apache1-base
 %webapp_unregister apache %{_webapp}
 
-%triggerin -- apache < 2.2.0, apache-base
+%triggerin -- apache-base
 %webapp_register httpd %{_webapp}
 
-%triggerun -- apache < 2.2.0, apache-base
+%triggerun -- apache-base
 %webapp_unregister httpd %{_webapp}
 
 %triggerun -- lighttpd
