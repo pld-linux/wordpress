@@ -6,35 +6,37 @@
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	3.0.4
-Release:	4
+Version:	3.5.1
+Release:	1
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
-# Source0-md5:	a455e0834eb2c8994c35acf3c13ddc11
+# Source0-md5:	409889c98b13cbdbb9fd121df859ae3e
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
 Source4:	apache.conf
 Source5:	lighttpd.conf
-Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/%{version}/messages/et.po
-# Source6-md5:	faccf42481d5bf742b019c24a3c6251a
-Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/%{version}/messages/pl_PL.po
-# Source7-md5:	8c9038410b596f9c705cc006dcdd5960
+# no 3.5.1 tag
+Source6:	http://svn.automattic.com/wordpress-i18n/et/tags/3.5/messages/et.po
+# Source6-md5:	e6fbcf1940701ce6f1f91c0ad4ed5a99
+# no messages under 3.5 tag
+Source7:	http://svn.automattic.com/wordpress-i18n/pl_PL/tags/3.2.1/messages/pl_PL.po
+# Source7-md5:	a0f5d65b7d4e5d53209edc595a19ff49
 Patch0:		configpath.patch
 Patch1:		multisite.patch
 Patch2:		%{name}.patch
 Patch3:		simplepie.patch
 Patch4:		pear-text-diff.patch
-Patch5:		atomlib.patch
 Patch6:		swfobject.patch
 Patch7:		phpmailer.patch
 URL:		http://www.wordpress.org/
 BuildRequires:	gettext-devel
 BuildRequires:	rpm-php-pearprov
 BuildRequires:	rpmbuild(macros) >= 1.553
-Requires:	js-swfobject >= 2.1
+Requires:	js-swfobject >= 2.2
 Requires:	php(core) >= %{php_min_version}
+Requires:	php(date)
 Requires:	php(dom)
 Requires:	php(gettext)
 Requires:	php(hash)
@@ -46,8 +48,6 @@ Requires:	php(pcre)
 Requires:	php(spl)
 Requires:	php(tokenizer)
 Requires:	php(xml)
-Requires:	php-atomlib >= 0.4
-Requires:	php-date
 Requires:	php-pear-Text_Diff
 Requires:	php-phpmailer >= 2.0.4
 Requires:	php-simplepie >= 1.2
@@ -89,8 +89,8 @@ WordPress jest nowym oprogramowaniem, ale jego korzenie i rozwój
 sięgają 2001 roku.
 
 %package setup
-Summary:	Wordpress setup package
-Summary(pl.UTF-8):	Pakiet do wstępnej konfiguracji Wordpress
+Summary:	WordPress setup package
+Summary(pl.UTF-8):	Pakiet do wstępnej konfiguracji WordPress
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
 
@@ -105,7 +105,7 @@ po pierwszej instalacji. Potem należy go odinstalować, jako że
 pozostawienie plików instalacyjnych mogłoby być niebezpieczne.
 
 %package plugin-akismet
-Summary:	Wordpress Akismet Plugin
+Summary:	WordPress Akismet Plugin
 Group:		Applications/WWW
 Requires:	%{name} = %{version}-%{release}
 
@@ -114,23 +114,42 @@ Akismet checks your comments against the Akismet web service to see if
 they look like spam or not and lets you review the spam it catches
 under your blog's "Comments" admin screen.
 
-%package theme-twentyten
-Summary:	Wordpress MU default theme
+%package theme-twentyeleven
+Summary:	WordPress Twenty Eleven theme
 Group:		Applications/WWW
-URL:		http://wordpress.org/extend/themes/twentyten
+URL:		http://wordpress.org/extend/themes/twentyeleven
 Requires:	%{name} = %{version}-%{release}
 
-%description theme-twentyten
-The 2010 theme for WordPress is stylish, customizable, simple, and
-readable.
+%description theme-twentyeleven
+The 2011 theme for WordPress is sophisticated, lightweight, and
+adaptable.
 
-Make it yours with a custom menu, header image, and background. Twenty
-Ten supports six widgetized areas (two in the sidebar, four in the
-footer) and featured images (thumbnails for gallery posts and custom
-header images for posts and pages). It includes stylesheets for print
-and the admin Visual Editor, special styles for posts in the "Asides"
-and "Gallery" categories, and has an optional one-column page template
-that removes the sidebar.
+Make it yours with a custom menu, header image, and background -- then
+go further with available theme options for light or dark color
+scheme, custom link colors, and three layout choices. Twenty Eleven
+comes equipped with a Showcase page template that transforms your
+front page into a showcase to show off your best content, widget
+support galore (sidebar, three footer areas, and a Showcase page
+widget area), and a custom "Ephemera" widget to display your Aside,
+Link, Quote, or Status posts. Included are styles for print and for
+the admin editor, support for featured images (as custom header images
+on posts and pages and as large images on featured "sticky" posts),
+and special styles for six different post formats.
+
+%package theme-twentytwelve
+Summary:	WordPress Twenty Twelve theme
+Group:		Applications/WWW
+URL:		http://wordpress.org/extend/themes/twentytwelve
+Requires:	%{name} = %{version}-%{release}
+
+%description theme-twentytwelve
+The 2012 theme for WordPress is a fully responsive theme that looks
+great on any device.
+
+Features include a front page template with its own widgets, an
+optional display font, styling for post formats on both index and
+single views, and an optional no-sidebar page template. Make it yours
+with a custom menu, header image, and background.
 
 %prep
 %setup -qc
@@ -138,46 +157,54 @@ mv %{name}/* . && rmdir %{name}
 %undos -f php,js,html
 %patch0 -p1
 %patch1 -p1
-cp -a wp-config{-sample,}.php
+cp -p wp-config{-sample,}.php
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 %patch6 -p1
 %patch7 -p1
-cp -a %{SOURCE3} .
+cp -p %{SOURCE3} .
 
-rm license.txt
-rm wp-content/themes/index.php
-rm wp-content/plugins/index.php
-rm wp-content/index.php
+%{__rm} license.txt
+%{__rm} wp-content/themes/index.php
+%{__rm} wp-content/plugins/index.php
+%{__rm} wp-content/index.php
 
-# remove *.dev js/.css
-find -name *.dev.js | xargs rm -v
-find -name *.dev.css | xargs rm -v
+# remove .js/.css with matching minified file
+find -name '*.min.js' | while read min; do
+	js=${min%.min.js}.js
+	test -e $js && echo $js
+done | xargs rm -v
+
+find -name '*.min.css' | while read min; do
+	css=${min%.min.css}.css
+	test -e $css && echo $css
+done | xargs rm -v
 
 # sample plugin
-rm wp-content/plugins/hello.php
+%{__rm} wp-content/plugins/hello.php
 
 # system swfobject
-rm wp-includes/js/swfobject.js
+%{__rm} wp-includes/js/swfobject.js
 
 # system simplepie
-rm wp-includes/class-simplepie.php
+%{__rm} wp-includes/class-simplepie.php
 
 # system php-pear-Text_Diff
-rm -r wp-includes/Text/Diff*
+%{__rm} -r wp-includes/Text/Diff*
 rmdir wp-includes/Text
 
 # system atomlib
-rm wp-includes/atomlib.php
+%{__rm} wp-includes/atomlib.php
 
 # system phpmailer
-rm wp-includes/class-phpmailer.php
-rm wp-includes/class-smtp.php
+%{__rm} wp-includes/class-phpmailer.php
+%{__rm} wp-includes/class-smtp.php
 
 # php 5.2 + json ext satisfies this compat
-rm wp-includes/class-json.php
+%{__rm} wp-includes/class-json.php
+
+%{__rm} wp-content/plugins/akismet/.htaccess
 
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
@@ -200,9 +227,9 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/wp-setup
 ln -s %{_bindir}/wp-setup $RPM_BUILD_ROOT%{_appdir}/wp-setup.sh
 ln -s %{_bindir}/wp-secure $RPM_BUILD_ROOT%{_appdir}/wp-secure.sh
 
-cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
-cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-cp -a %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -284,9 +311,15 @@ fi
 %defattr(644,root,root,755)
 %dir %{_appdir}/wp-content/plugins/akismet
 %doc %{_appdir}/wp-content/plugins/akismet/readme.txt
-%{_appdir}/wp-content/plugins/akismet/*.php
+%{_appdir}/wp-content/plugins/akismet/*.css
 %{_appdir}/wp-content/plugins/akismet/*.gif
+%{_appdir}/wp-content/plugins/akismet/*.js
+%{_appdir}/wp-content/plugins/akismet/*.php
 
-%files theme-twentyten
+%files theme-twentyeleven
 %defattr(644,root,root,755)
-%{_appdir}/wp-content/themes/twentyten
+%{_appdir}/wp-content/themes/twentyeleven
+
+%files theme-twentytwelve
+%defattr(644,root,root,755)
+%{_appdir}/wp-content/themes/twentytwelve

@@ -1,12 +1,12 @@
---- wordpress/wp-includes/pluggable.php~	2010-09-09 16:45:23.000000000 +0300
-+++ wordpress/wp-includes/pluggable.php	2010-09-09 18:51:10.849503438 +0300
-@@ -279,8 +279,7 @@
+--- wordpress-3.5.1/wp-includes/pluggable.php~	2013-02-06 16:24:28.000000000 +0200
++++ wordpress-3.5.1/wp-includes/pluggable.php	2013-02-06 16:24:59.242270976 +0200
+@@ -222,8 +222,7 @@
  
  	// (Re)create it, if it's gone missing
  	if ( !is_object( $phpmailer ) || !is_a( $phpmailer, 'PHPMailer' ) ) {
 -		require_once ABSPATH . WPINC . '/class-phpmailer.php';
 -		require_once ABSPATH . WPINC . '/class-smtp.php';
 +		require_once 'class.phpmailer.php';
- 		$phpmailer = new PHPMailer();
+ 		$phpmailer = new PHPMailer( true );
  	}
  

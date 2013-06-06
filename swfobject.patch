@@ -1,11 +1,11 @@
---- wordpress-3.0.1/wp-includes/script-loader.php~	2010-09-09 16:21:19.000000000 +0300
-+++ wordpress-3.0.1/wp-includes/script-loader.php	2010-09-09 16:26:18.913290221 +0300
-@@ -176,7 +176,7 @@
+--- wordpress-3.5.1/wp-includes/script-loader.php~	2013-02-06 16:23:21.000000000 +0200
++++ wordpress-3.5.1/wp-includes/script-loader.php	2013-02-06 16:24:06.019821611 +0200
+@@ -192,7 +192,7 @@
  
- 	$scripts->add( 'jcrop', "/wp-includes/js/jcrop/jquery.Jcrop$suffix.js", array('jquery'), '0.9.8');
+ 	$scripts->add( 'jcrop', "/wp-includes/js/jcrop/jquery.Jcrop.min.js", array('jquery'), '0.9.10');
  
--	$scripts->add( 'swfobject', "/wp-includes/js/swfobject.js", false, '2.2');
-+	$scripts->add( 'swfobject', "/js/swfobject.js", false, '2.2');
+-	$scripts->add( 'swfobject', "/wp-includes/js/swfobject.js", array(), '2.2-20120417');
++	$scripts->add( 'swfobject', "/js/swfobject.js", array(), '2.2-20120417');
  
- 	$scripts->add( 'swfupload', '/wp-includes/js/swfupload/swfupload.js', false, '2201');
- 	$scripts->add( 'swfupload-swfobject', '/wp-includes/js/swfupload/plugins/swfupload.swfobject.js', array('swfupload', 'swfobject'), '2201');
+ 	// common bits for both uploaders
+ 	$max_upload_size = ( (int) ( $max_up = @ini_get('upload_max_filesize') ) < (int) ( $max_post = @ini_get('post_max_size') ) ) ? $max_up : $max_post;
