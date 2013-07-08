@@ -6,12 +6,12 @@
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
 Name:		wordpress
-Version:	3.5.1
+Version:	3.5.2
 Release:	1
 License:	GPL v2
 Group:		Applications/Publishing
 Source0:	http://wordpress.org/%{name}-%{version}.tar.gz
-# Source0-md5:	409889c98b13cbdbb9fd121df859ae3e
+# Source0-md5:	90acae65199db7b33084ef36860d7f22
 Source1:	wp-secure.sh
 Source2:	wp-setup.sh
 Source3:	wp-setup.txt
