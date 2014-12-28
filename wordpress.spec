@@ -31,7 +31,7 @@ Patch4:		pear-text-diff.patch
 Patch6:		swfobject.patch
 Patch7:		phpmailer.patch
 URL:		http://www.wordpress.org/
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	rpm-php-pearprov
 BuildRequires:	rpmbuild(macros) >= 1.553
 Requires:	js-swfobject >= 2.2
