@@ -1,7 +1,6 @@
 # TODO
 # - gettext mo to system dir, add all possible languages?
 # - merge changes from wpmu.spec
-%include	/usr/lib/rpm/macros.php
 %define		php_min_version 5.2.1
 Summary:	Personal publishing system
 Summary(pl.UTF-8):	Osobisty system publikacji
